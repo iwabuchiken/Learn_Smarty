@@ -1,0 +1,9 @@
+[sqlite]
+sqlite3 C:\WORKS\WS\Eclipse_Luna\Smarty\D-1\dogsDb_PDO.sqlite
+
+.explain on
+.tables
+
+pragma table_info(Dogs);
+
+SELECT * FROM Dogs;
