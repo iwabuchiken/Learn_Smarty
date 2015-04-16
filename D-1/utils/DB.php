@@ -89,6 +89,7 @@
 
 // 					$index = 1;
 					
+					//REF http://stackoverflow.com/questions/1451720/equivalent-of-mysql-list-tables-in-php-pdo answered Jan 29 '14 at 12:32
 					while($row = $res->fetch()){
 // 					while($row=$alltables->fetch()){
 					
