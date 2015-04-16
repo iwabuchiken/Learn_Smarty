@@ -18,6 +18,70 @@
 	//debug
 	echo Utils::get_CurrentTime();
 	
+	echo "<br>";
+	echo "<br>";
+	
+	/*******************************
+		db
+	*******************************/
+	try {
+		
+		$db = new PDO('sqlite:dogsDb_PDO.sqlite');
+// 		$db = new PDO('sqlite:file:///D-1/dogsDb_PDO.sqlite');	//=> no
+// 		$db = new PDO('sqlite://D-1/dogsDb_PDO.sqlite');	//=> n/w
+// 		$db = new PDO('sqlite:D-1/dogsDb_PDO.sqlite');
+// 		$db = new PDO('sqlite:dogsDb_PDO.sqlite');
+		
+		//REF if not exists http://stackoverflow.com/questions/1601151/how-do-i-check-in-sqlite-whether-a-table-exists answered Mar 5 '11 at 17:36
+		$db->exec("CREATE TABLE IF NOT EXISTS"
+					." Dogs "
+					."(Id INTEGER PRIMARY KEY, Breed TEXT, Name TEXT, Age INTEGER)");
+
+// 		$db->exec("INSERT INTO Dogs (Breed, Name, Age) VALUES ('Labrador', 'Tank', 2);".
+// 				"INSERT INTO Dogs (Breed, Name, Age) VALUES ('Husky', 'Glacier', 7); " .
+// 				"INSERT INTO Dogs (Breed, Name, Age) VALUES ('Golden-Doodle', 'Ellie', 4);");
+		
+		$result = $db->query('SELECT * FROM Dogs');
+		
+		echo count($result);
+
+// 		print_r($result);
+// 		echo $result;
+
+		echo "<br>";
+		echo "<br>";
+		
+		print "<table border=1>";
+		
+		print "<tr><td>Id</td><td>Breed</td><td>Name</td><td>Age</td></tr>";
+		
+		$result = $db->query('SELECT * FROM Dogs');
+		
+		foreach($result as $row)
+			
+			{
+				
+				print "<tr><td>".$row['Id']."</td>";
+				
+				print "<td>".$row['Breed']."</td>";
+				
+				print "<td>".$row['Name']."</td>";
+				
+				print "<td>".$row['Age']."</td></tr>";
+				
+			}
+		
+		print "</table>";
+		
+		$db = null;
+
+	} catch (Exception $e) {
+		
+		print $e->getMessage();
+		
+	}
+	
+	
 	/*******************************
 		tpl name
 	*******************************/
