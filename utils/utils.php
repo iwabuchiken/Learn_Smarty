@@ -1705,6 +1705,11 @@
 			
 		}//get_Dirname($dpath, $start_Dir)
 
+		/*******************************
+			convert: rows of csv data to tokens<br>
+			@param
+			$rows => (csv1, csv2, ...)
+		*******************************/
 		public static function
 		conv_Rows_2_Tokens($smarty, $rows) {
 
@@ -1722,6 +1727,7 @@
 						->set_updated_at($r[2])
 						->set_form($r[3])
 						->set_hin($r[4])
+						->set_db_Id($r[0])
 				;
 				
 				array_push($tokens, $token);
@@ -1736,6 +1742,33 @@
 				return
 			*******************************/
 			return $tokens;
+			
+		}//conv_Rows_2_Tokens
+		
+		
+		/*******************************
+			convert: a row of csv data to a token<br>
+			@param
+			$row => ([0] => id, [1] => created_at, ...)
+		*******************************/
+		public static function
+		conv_Row_2_Token($smarty, $row) {
+
+// 			$token = null;
+			
+			$token = new Token();
+			
+			$token->set_created_at($row[1])
+					->set_updated_at($row[2])
+					->set_form($row[3])
+					->set_hin($row[4])
+					->set_db_Id($row[0])
+			;
+			
+			/*******************************
+				return
+			*******************************/
+			return $token;
 			
 		}//conv_Rows_2_Tokens
 		

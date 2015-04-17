@@ -305,5 +305,95 @@
 			return $rows;
 			
 		}//findAll_Tokens($smarty)
+
+		/*******************************
+			@return
+			-1	=> db --> null
+		*******************************/
+		public static function
+		save_Tokens($smarty, $tokens) {
+			
+			/*******************************
+			 get: db
+			*******************************/
+			$dbType = DB::get_DB_Type();
+				
+			$db = DB::get_DB($dbType);
+			
+			/*******************************
+			 validate
+			*******************************/
+			if ($db == null) {
+			
+				printf("[%s : %d] db => null: type=%s", __FILE__, __LINE__, $dbType);
+			
+				echo "<br>";
+				echo "<br>";
+			
+				return -1;
+			
+			}
+
+			/*******************************
+			 save: tokens
+			*******************************/
+// 			if ($dbType == DB::$dbType_MySQL) {
+					
+// 				$rows = array();
+			
+// 				$sql = "SELECT * FROM tokens WHERE history_id = 1545;";
+// 				// 				$sql = "SELECT * FROM tokens WHERE id < 10;";
+			
+// 				$res = $db->query($sql);
+			
+// 				while($row = $res->fetch()){
+// 					// 					while($row=$alltables->fetch()){
+			
+// 					// 					var_dump(array_values($row));
+// 					// 					var_dump(array_keys($row));
+// 					// 					var_dump($row);
+						
+// 					// 					echo "<br>";
+						
+						
+						
+// 					// 					echo $row[0].",".$row[1].",".$row[2].","
+// 					// // 							.mb_convert_encoding($row[3], "UTF-8")
+// 					// 							.$row[3]
+// 					// 							.'<br/>';
+			
+// 					array_push($rows, $row);
+						
+// 				}
+			
+// 				printf("[%s : %d] rows => %d", __FILE__, __LINE__, count($rows));
+			
+// 				echo "<br>";
+// 				echo "<br>";
+			
+			
+					
+// 			} else {
+					
+// 				printf("[%s : %d] sqlite. no op", __FILE__, __LINE__);
+			
+// 				echo "<br>";
+// 				echo "<br>";
+			
+			
+			
+// 			}//if ($dbType == DB::$dbType_MySQL)
+					
+			/*******************************
+			 db: close
+			*******************************/
+			$db = null;
+
+			/*******************************
+				return
+			*******************************/
+			return -1;
+				
+		}//save_Tokens($smarty, $tokens)
 		
 	}//class DB

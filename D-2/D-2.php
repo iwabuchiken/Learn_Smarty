@@ -54,7 +54,7 @@
 		
 	}//smarty_Assign($smarty, $tpl_name)
 	
-	function smart_Setup($smarty) {
+	function smarty_Setup($smarty) {
 
 		$smarty->setCaching(true);
 		
@@ -158,11 +158,127 @@
 	}
 	
 	function 
+	execute_DB_Create_LocalDB($smarty) {
+
+		/*******************************
+			open
+		*******************************/
+		$fname = "../data/tokens.csv";
+		
+		$f = fopen($fname, "r");
+		
+		if ($f == false) {
+			
+			printf("[%s : %d] csv => false", 
+					Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			echo "<br>";
+			echo "<br>";
+			
+			return ;
+			
+		} else {
+			
+			printf("[%s : %d] csv => opened: %s", 
+					Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+
+			echo "<br>"; echo "<br>";
+			
+		}
+
+		/*******************************
+			read: csv
+		*******************************/
+		$count = 0;
+		$len = -1;
+		
+		$data = fgetcsv($f, 500, ",");		// first line => header
+		$data = fgetcsv($f, 500, ",");		// 	
+		
+		$content = "";
+		
+		$tokens = array();
+		
+		//REF fgets http://www.tizag.com/phpT/fileread.php
+// 		while ($data = fgets($f)) {
+		while ($data) {
+// 		while ($data = fgetcsv($f, 500, ",")) {
+
+			$t = Utils::conv_Row_2_Token($smarty, $data);
+// 			$t = Utils::conv_Rows_2_Tokens($smarty, $data);
+			
+			array_push($tokens, $t);
+			
+			$data = fgetcsv($f, 500, ",");
+			
+// 			$content .= $data[2];		// "form"
+			
+// 			$tmp = mb_strlen($data);
+			
+// 			if ($tmp > $len) {
+				
+// 				$len = $tmp;
+				
+// 			}
+			
+// 			if ($count > 10) {
+				
+// 				continue;
+				
+// 			}
+			
+// 			printf("[%s : %d] data=%s", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $data);
+			
+// 			echo "<br>"; echo "<br>";
+			
+// 			$count ++;
+			
+			
+		}//while (condition)		
+		
+		printf("[%s : %d] read csv => done", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+		
+		echo "<br>"; echo "<br>";
+
+// 		printf("[%s : %d] line length=%d", 
+// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $len);
+		
+// 		echo "<br>"; echo "<br>";
+		
+		printf("[%s : %d] tokens = %d", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
+
+		echo "<br>"; echo "<br>";
+		
+		/*******************************
+			close
+		*******************************/
+		fclose($f);
+		
+		/*******************************
+			save: tokens
+		*******************************/
+		$res = DB::save_Tokens($smarty, $tokens);
+		
+		/*******************************
+			result
+		*******************************/
+		printf("[%s : %d] save tokens => %d", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
+		
+		echo "<br>"; echo "<br>";
+		
+	}//execute_DB_Create_LocalDB
+	
+	
+	function 
 	do_Job_D_2() {
 
 		$smarty = new Smarty();
 		
-		smart_Setup($smarty);
+		smarty_Setup($smarty);
 		
 		//debug
 		// 	echo Utils::get_CurrentTime();
@@ -215,7 +331,7 @@
 
 		$smarty = new Smarty();
 		
-		smart_Setup($smarty);
+		smarty_Setup($smarty);
 		
 		//debug
 		// 	echo Utils::get_CurrentTime();
@@ -260,6 +376,57 @@
 		
 	}//do_Job_D_2()
 	
+	/*******************************
+		create: local db
+	*******************************/
+	function 
+	do_Job_D_2_V_3_0() {
+
+		$smarty = new Smarty();
+		
+		smarty_Setup($smarty);
+		
+		//debug
+		printf("[%s : %d] %s",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+		// 				Utils::get_Dirname(__FILE__, "Smarty"),
+		__LINE__, Utils::get_CurrentTime());
+		
+		echo "<br>"; echo "<br>";
+		
+		/*******************************
+		 db
+		*******************************/
+		execute_DB_Create_LocalDB($smarty);
+		// 	DB::setup_DB($smarty);
+		
+		/*******************************
+		 tpl name
+		*******************************/
+		$tpl_name = get_Tpl_Name();
+		
+		/*******************************
+		 assigns
+		*******************************/
+		if (!$smarty->isCached($tpl_name)) {
+		
+			echo "not cached => $tpl_name.tpl";
+		
+			smarty_Assign($smarty, $tpl_name);
+		
+		} else {
+		
+		echo "$tpl_name.tpl => cached";
+		
+		}
+		
+		/*******************************
+		view
+		*******************************/
+		execute_View($smarty, $tpl_name);
+		
+	}//do_Job_D_2_V_3_0
+	
 ?>
 
 <?php
@@ -271,5 +438,6 @@
 // 	require 'utils/utils.php';
 // 	require 'utils/DB.php';
 	
-	do_Job_D_2_V_2_0();
+	do_Job_D_2_V_3_0();
+// 	do_Job_D_2_V_2_0();
 // 	do_Job_D_2();
