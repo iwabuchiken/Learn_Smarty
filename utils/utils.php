@@ -1688,6 +1688,7 @@
 			
 // 			printf("[%s : %d] dirname=%s", __FILE__, __LINE__, dirname($dpath));
 			
+			//REF SEPARATOR http://stackoverflow.com/questions/6654157/how-to-get-a-platform-independent-directory-separator-in-php answered Jul 11 '11 at 17:47
 			$tokens = explode(DIRECTORY_SEPARATOR, $dpath);
 			
 			$loc = Utils::get_Index($tokens, $start_Dir);

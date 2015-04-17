@@ -196,7 +196,8 @@
 				echo "<br>";
 				
 // 				$db = null;
-				
+
+				//REF encoding http://stackoverflow.com/questions/4475548/pdo-mysql-and-broken-utf-8-encoding answered Aug 11 '11 at 17:53
 				$db = new PDO(
 							$db_Remote_PDO, 
 							DB::$db_Remote_Uname, 
