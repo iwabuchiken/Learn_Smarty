@@ -1704,6 +1704,40 @@
 // 			return dirname($dpath)."***".basename($dpath);
 			
 		}//get_Dirname($dpath, $start_Dir)
+
+		public static function
+		conv_Rows_2_Tokens($smarty, $rows) {
+
+			$tokens = array();
+			
+			$len = count($rows);
+			
+			for ($i = 0; $i < $len; $i++) {
+				
+				$r = $rows[$i];
+				
+				$token = new Token();
+				
+				$token->set_created_at($r[1])
+						->set_updated_at($r[2])
+						->set_form($r[3])
+						->set_hin($r[4])
+				;
+				
+				array_push($tokens, $token);
+				
+			}
+			
+			printf("[%s : %d] tokens => %d", 
+					Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+					__LINE__, count($tokens));
+
+			/*******************************
+				return
+			*******************************/
+			return $tokens;
+			
+		}//conv_Rows_2_Tokens
 		
 	}//class Utils
 	

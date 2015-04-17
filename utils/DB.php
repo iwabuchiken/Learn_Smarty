@@ -1,7 +1,9 @@
 <?php
 
+	require '../models/Token.php';
+	
 	class DB {
-		
+
 		public static $db_Local_PDO = "sqlite:dogsDb_PDO.sqlite";
 		
 		public static $db_Remote_Name = "mysql018.phy.lolipop.lan";
@@ -214,6 +216,10 @@
 			
 		}//get_DB
 		
+		/*******************************
+			@return
+			Array of fetched rows
+		*******************************/
 		public static function
 		findAll_Tokens($smarty) {
 			
@@ -292,6 +298,11 @@
 				db: close
 			*******************************/
 			$db = null;
+
+			/*******************************
+				return
+			*******************************/
+			return $rows;
 			
 		}//findAll_Tokens($smarty)
 		

@@ -97,12 +97,121 @@
 
 	function execute_DB($smarty) {
 
-		DB::findAll_Tokens($smarty);
+		/*******************************
+			get: rows
+		*******************************/
+		$rows = DB::findAll_Tokens($smarty);
+		
+		if ($rows == null) {
+			
+			printf("[%s : %d] rows => null", __FILE__, __LINE__);
+			
+			echo "<br>";
+			echo "<br>";
+
+			return ;
+			
+		}
+		
+		printf("[%s : %d] rows => %d", __FILE__, __LINE__, count($rows));
+		echo "<br>";
+		echo "<br>";
+		
+		/*******************************
+			get: tokens
+		*******************************/
+		$tokens = Utils::conv_Rows_2_Tokens($smarty, $rows);
+		
+		/*******************************
+			view
+		*******************************/
+		echo "<table border='1'>";
+		
+			for ($i = 0; $i < 10; $i++) {
+
+				echo "<tr>";
+					
+					$t = $tokens[$i];
+
+					echo "<td>";
+						echo $t->get_form();
+					echo "</td>";
+					
+					echo "<td>";
+						echo $t->get_hin();
+					echo "</td>";
+					
+// 					echo "<br>";
+// 					echo "<br>";
+				
+				echo "</tr>";
+				
+			}
+		
+		echo "</table>";
+		
+		echo "<br>";
+		echo "<br>";
+		
+		
 		
 	}
 	
 	function 
 	do_Job_D_2() {
+
+		$smarty = new Smarty();
+		
+		smart_Setup($smarty);
+		
+		//debug
+		// 	echo Utils::get_CurrentTime();
+		
+		printf("[%s : %d] %s",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+		// 				Utils::get_Dirname(__FILE__, "Smarty"),
+		__LINE__, Utils::get_CurrentTime());
+		
+		echo "<br>"; echo "<br>";
+		
+		/*******************************
+		 db
+		*******************************/
+		execute_DB($smarty);
+		// 	DB::setup_DB($smarty);
+		
+		/*******************************
+		 tpl name
+		*******************************/
+		$tpl_name = get_Tpl_Name();
+		
+		/*******************************
+		 assigns
+		*******************************/
+		if (!$smarty->isCached($tpl_name)) {
+		
+			echo "not cached => $tpl_name.tpl";
+		
+			smarty_Assign($smarty, $tpl_name);
+		
+		} else {
+		
+		echo "$tpl_name.tpl => cached";
+		
+		}
+		
+		/*******************************
+		view
+		*******************************/
+		execute_View($smarty, $tpl_name);
+		
+	}//do_Job_D_2()
+	
+	/*******************************
+		convert => rows to token instaces
+	*******************************/
+	function 
+	do_Job_D_2_V_2_0() {
 
 		$smarty = new Smarty();
 		
@@ -162,4 +271,5 @@
 // 	require 'utils/utils.php';
 // 	require 'utils/DB.php';
 	
-	do_Job_D_2();
+	do_Job_D_2_V_2_0();
+// 	do_Job_D_2();
