@@ -1,9 +1,15 @@
 [sqlite]
 sqlite3 C:\WORKS\WS\Eclipse_Luna\Smarty\D-1\dogsDb_PDO.sqlite
+sqlite3 C:\WORKS\WS\Eclipse_Luna\Smarty\D-2\development.sqlite3
 
 .explain on
 .tables
 
 pragma table_info(Dogs);
+pragma table_info(tokens);
 
 SELECT * FROM Dogs;
+
+SELECT * FROM tokens;
+
+DROP TABLE tokens;

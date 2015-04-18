@@ -1,5 +1,7 @@
 <?php 
 
+// 	require '../utils/Task_SaveTokens.php';
+
 	function
 	smarty_Assign($smarty, $tpl_name) {
 	
@@ -382,6 +384,41 @@
 	function 
 	do_Job_D_2_V_3_0() {
 
+		//test
+		
+		
+		/*******************************
+			dispatch
+		*******************************/
+		@$server_Name = $_SERVER['SERVER_NAME'];
+		
+		if ($server_Name == null) {
+		
+			printf("[%s : %d] servr name => null", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			echo "<br>"; echo "<br>";
+			
+			do_Job_D_2_V_2_0();
+			
+			return ;
+		
+		} else if ($server_Name != 'localhost') {
+
+			printf("[%s : %d] server is => $server_Name",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+			echo "<br>"; echo "<br>";
+				
+			do_Job_D_2_V_2_0();
+				
+			return ;
+			
+		}
+			
+		/*******************************
+			setup: smarty
+		*******************************/
 		$smarty = new Smarty();
 		
 		smarty_Setup($smarty);
