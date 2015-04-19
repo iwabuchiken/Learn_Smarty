@@ -35,6 +35,10 @@ class CONS {
 	****************************************/
 	public static $logFile_maxLineNum = 3000;
 
+	public static $numOf_Lines_PerFile = 10000;
+
+	
+	
 	/****************************************
 		* Session keys
 	****************************************/

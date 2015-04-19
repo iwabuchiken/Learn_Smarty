@@ -202,40 +202,13 @@
 		$tokens = array();
 		
 		//REF fgets http://www.tizag.com/phpT/fileread.php
-// 		while ($data = fgets($f)) {
 		while ($data) {
-// 		while ($data = fgetcsv($f, 500, ",")) {
 
 			$t = Utils::conv_Row_2_Token($smarty, $data);
-// 			$t = Utils::conv_Rows_2_Tokens($smarty, $data);
 			
 			array_push($tokens, $t);
 			
 			$data = fgetcsv($f, 500, ",");
-			
-// 			$content .= $data[2];		// "form"
-			
-// 			$tmp = mb_strlen($data);
-			
-// 			if ($tmp > $len) {
-				
-// 				$len = $tmp;
-				
-// 			}
-			
-// 			if ($count > 10) {
-				
-// 				continue;
-				
-// 			}
-			
-// 			printf("[%s : %d] data=%s", 
-// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $data);
-			
-// 			echo "<br>"; echo "<br>";
-			
-// 			$count ++;
-			
 			
 		}//while (condition)		
 		
@@ -244,11 +217,6 @@
 		
 		echo "<br>"; echo "<br>";
 
-// 		printf("[%s : %d] line length=%d", 
-// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $len);
-		
-// 		echo "<br>"; echo "<br>";
-		
 		printf("[%s : %d] tokens = %d", 
 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
 
@@ -259,16 +227,16 @@
 		*******************************/
 		fclose($f);
 		
-		/*******************************
-			save: tokens
-		*******************************/
-		$res = DB::save_Tokens($smarty, $tokens);
+// 		/*******************************
+// 			save: tokens
+// 		*******************************/
+// 		$res = DB::save_Tokens($smarty, $tokens);
 		
-		/*******************************
-			result
-		*******************************/
-		printf("[%s : %d] save tokens => %d", 
-						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
+// 		/*******************************
+// 			result
+// 		*******************************/
+// 		printf("[%s : %d] save tokens => %d", 
+// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
 		
 		echo "<br>"; echo "<br>";
 		
@@ -513,12 +481,34 @@
 		__LINE__, Utils::get_CurrentTime());
 		
 		echo "<br>"; echo "<br>";
-		
+
+// 		/*******************************
+// 			csv: divide
+// 		*******************************/
+// 		$res = Utils::divide_CSV($smarty);
+
 		/*******************************
-		 db
+			build: tokens
 		*******************************/
-		execute_DB_Create_LocalDB($smarty);
-		// 	DB::setup_DB($smarty);
+		$res = Utils::save_Tokens_from_CSV($smarty);
+		
+// 		$fname = "../data/tokens_1.csv";
+		
+// 		$tokens = Utils::get_Tokens_from_CSV($smarty, $fname);
+		
+// 		if ($tokens == null) {
+		
+// 			printf("[%s : %d] tokens => null", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+		
+// 		} else {
+		
+// 			printf("[%s : %d] tokens => %d", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
+			
+// 		}//if ($tokens == null)
+		
+// 		echo "<br>"; echo "<br>";
 		
 		/*******************************
 		 tpl name
