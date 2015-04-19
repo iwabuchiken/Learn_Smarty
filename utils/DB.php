@@ -313,7 +313,9 @@
 
 		/*******************************
 			@return
-			-1	=> db --> null
+			 > 0 => number of data inserted
+			-1 => can't create table
+			-2	=> get_DB --> null returned
 		*******************************/
 		public static function
 		save_Tokens($smarty, $tokens) {
@@ -335,7 +337,7 @@
 				echo "<br>";
 				echo "<br>";
 			
-				return -1;
+				return -2;
 			
 			}
 
@@ -344,11 +346,11 @@
 			*******************************/
 			if ($dbType == DB::$dbType_MySQL) {
 					
-				DB::save_Tokens_MYSQL($smarty, $db, $tokens);
+				$res = DB::save_Tokens_MYSQL($smarty, $db, $tokens);
 					
 			} else if ($dbType == DB::$dbType_SQLite) {
 					
-				DB::save_Tokens_SQLITE($smarty, $db, $tokens);
+				$res = DB::save_Tokens_SQLITE($smarty, $db, $tokens);
 			
 			}//if ($dbType == DB::$dbType_MySQL)
 					
@@ -360,7 +362,8 @@
 			/*******************************
 				return
 			*******************************/
-			return -1;
+			return $res;
+// 			return -1;
 				
 		}//save_Tokens($smarty, $tokens)
 
@@ -432,82 +435,101 @@
 			
 			$count = 0;
 			
-// 			for ($i = 0; $i < $len; $i++) {
+			for ($i = 0; $i < $len; $i++) {
 				
 				
 					
-// 				$t = $tokens[$i];
+				$t = $tokens[$i];
 	
-// 				//REF http://www.phpeveryday.com/articles/PDO-Insert-and-Update-Statement-Use-Prepared-Statement-P552.html
-// 				$sql = "INSERT INTO"
-// 						." "
-// 						.$tname
-// 						." "
-// 						."("
-// 						." "
-// 							."id, created_at, updated_at, form"
-// 	// 						."hin, hin_1, hin_2, hin_3"
-// 						." "
-// 						.")"
-// 						." "
-// 						."VALUES"
-// 						." "
-// 						."("
-// 							.":id, :created_at, :updated_at, :form"
-// 	// 						.":id, :created_at, :updated_at, :form, "
-// 	// 						.":hin, :hin_1, :hin_2, :hin_3"
-// 						.")"
-// 					;
+				//REF http://www.phpeveryday.com/articles/PDO-Insert-and-Update-Statement-Use-Prepared-Statement-P552.html
+				$sql = "INSERT INTO"
+						." "
+						.$tname
+						." "
+						."("
+						." "
+							."id, created_at, updated_at, form"
+	// 						."hin, hin_1, hin_2, hin_3"
+						." "
+						.")"
+						." "
+						."VALUES"
+						." "
+						."("
+							.":id, :created_at, :updated_at, :form"
+	// 						.":id, :created_at, :updated_at, :form, "
+	// 						.":hin, :hin_1, :hin_2, :hin_3"
+						.")"
+					;
 	
-// 				//REF http://php.net/manual/en/pdo.prepare.php
-// 				//REF prepare http://www.plus2net.com/php_tutorial/pdo-drop.php
-// 				$q = $db->prepare($sql);
+				//REF http://php.net/manual/en/pdo.prepare.php
+				//REF prepare http://www.plus2net.com/php_tutorial/pdo-drop.php
+				$q = $db->prepare($sql);
 	
-// 				if ($q === false) {
+				if ($q === false) {
 					
-// 					printf("[%s : %d] prepare => failed: %s", 
-// 									Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $sql);
+					printf("[%s : %d] prepare => failed: %dth token", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $i);
 					
-// 					echo "<br>"; echo "<br>";
+					echo "<br>"; echo "<br>";
 					
 // 					return -2;
+					continue;
 					
-// 				}
+				}
 				
-// 				$res = $q->execute(array(
-// 	// 							':id'			=> $t->get_db_Id(),
-// 								':created_at'	=> $t->get_created_at(),
-// 								':updated_at'	=> $t->get_updated_at(),
+				$res = $q->execute(array(
+	// 							':id'			=> $t->get_db_Id(),
+								':created_at'	=> $t->get_created_at(),
+								':updated_at'	=> $t->get_updated_at(),
 						
-// 								':form'			=> $t->get_form(),
-// 	// 							':hin'			=> $t->get_hin(),
-// 	// 							':hin_1'		=> $t->get_hin_1(),
-// 	// 							':hin_2'		=> $t->get_hin_2(),
-// 	// 							':hin_3'		=> $t->get_hin_3(),
-// 								)
-// 				);
+								':form'			=> $t->get_form(),
+	// 							':hin'			=> $t->get_hin(),
+	// 							':hin_1'		=> $t->get_hin_1(),
+	// 							':hin_2'		=> $t->get_hin_2(),
+	// 							':hin_3'		=> $t->get_hin_3(),
+								)
+				);
 				
-// 				/*******************************
-// 					count
-// 				*******************************/
-// 				if ($res === true) {
+				/*******************************
+					count
+				*******************************/
+				if ($res === true) {
 					
-// 					$count ++;
+					$count ++;
+
+					/*******************************
+						interim
+					*******************************/
+					if ($count % 1000 == 0) {
+						
+						printf("[%s : %d] done => %d (time=%s)", 
+										Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+										__LINE__, 
+										$count,
+										date('m/d/Y H:i:s', time())
+						);
+						
+						echo "<br>"; echo "<br>";
+						
+					}
 					
-// 				}
+				}
 					
-// // 				printf("[%s : %d] query execute => %s", 
-// // 								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, 
-// // 								($res === true) ? "done" : "not done");
+// 				printf("[%s : %d] query execute => %s", 
+// 								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, 
+// 								($res === true) ? "done" : "not done");
 				
-// // 				echo "<br>"; echo "<br>";
-// 			}
+// 				echo "<br>"; echo "<br>";
+
+			}//for ($i = 0; $i < $len; $i++)
 			
-// 			printf("[%s : %d] inserted => %d out of %d", 
-// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, 
-// 							$count, count($tokens));
+			printf("[%s : %d] inserted => %d out of %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, 
+							$count, count($tokens));
 			
-			return 0;
+			return $count;
+// 			return 0;
 			
 		}//save_Tokens_SQLITE($smarty, $db, $tokens)
 

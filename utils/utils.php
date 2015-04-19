@@ -1266,391 +1266,6 @@
 			
 		}//get_Matching_Scores
 
-		public static function
-		create_Tokens($cat_Id) {
-			
-			/*******************************
-			 get: history list
-			*******************************/
-			$model = ClassRegistry::init('History');
-			
-			$option = array('conditions'
-					=> array(
-							'History.category_id'
-							=> $cat_Id));
-			
-			$histories = $model->find('all', $option);
-			
-			/*******************************
-			 validate: any history
-			*******************************/
-			if (count($histories) < 1) {
-			
-				debug("no history for category id: ".$cat_Id);
-				
-// 				$this->Session->setFlash(__('no history for category id: '.$cat_Id));
-			
-// 				$this->render("/Historys/tests/create_Tokens");
-			
-				return null;
-			
-			} else {
-			
-				debug("count(\$histories)");
-				debug(count($histories)."(".$histories[0]['History']['genre_id'].")");
-			
-			}
-			
-			/**********************************
-			 * validate:
-			**********************************/
-			$count = 0;
-			
-			foreach ($histories as $history) {
-				
-				$res = Utils::_save_Tokens__TokensExist($history);
-	// 			$res = $this->_save_Tokens__TokensExist($history);
-				
-				// 		debug("tokens exist => ".$res);
-				
-				if ($res == true) {
-						
-// 					$msg_Flash = "Tokens exist for this history: id = "
-// 							.$history['History']['id'];
-				
-// 					$this->Session->setFlash(__($msg_Flash));
-						
-					// 			debug("message => set");
-					
-					$count ++;
-						
-				} else {
-					
-					debug("tokens => don't exist for the history: "
-							.$history['History']['id']);
-					
-					/**********************************
-					 * words array
-					**********************************/
-					$words_ary = Utils::get_Words($history['History']['content']);
-						
-					// 			debug("\$words_ary length...");
-					// 			debug(count($words_ary));
-					
-// 					/**********************************
-// 					 * save tokens
-// 					**********************************/
-					$msg_Flash = Utils::save_Tokens__V2($words_ary, $history);
-// 					$msg_Flash = $this->save_Tokens__V2($words_ary, $history);
-
-				}
-				
-			}//foreach ($histories as $history)
-
-			debug("histories ".count($histories)." / "."tokens found ". $count);
-			
-			return null;
-			
-		}//create_Tokens
-
-		public static function
-		_save_Tokens__TokensExist($history) {
-		
-// 			$this->loadModel('Token');
-
-			$model = ClassRegistry::init('Token');
-		
-			$options = array(
-					'conditions' =>
-					array("Token.history_id" => $history['History']['id'])
-			);
-		
-			$tokens = $model->find('all', $options);
-// 			$tokens = $this->Token->find('all', $options);
-		
-			// 		debug("\$tokens ...");
-			// 		debug(count($tokens));
-		
-			/**********************************
-				* return
-			**********************************/
-			if ($tokens == null) {
-					
-				return false;
-					
-			} else if (count($tokens) > 0) {
-					
-				return true;
-					
-			} else {
-					
-				return true;
-					
-			}
-		
-		}//_save_Tokens__TokensExist
-
-		/*******************************
-		 @return
-		1. Flash message string
-		*******************************/
-		public static function
-		save_Tokens__V2
-		($words_ary, $history) {
-		
-			/**********************************
-				* vars
-			**********************************/
-			$msg_Flash = "";
-		
-			$tokens = array();
-		
-			/**********************************
-				* processing
-			**********************************/
-			$count = 0;
-			
-			for ($i = 0; $i < count($words_ary); $i++) {
-					
-				/**********************************
-					* get: words list
-				**********************************/
-				$words = $words_ary[$i];
-					
-				// 			$words= $this->get_Mecab_WordList($history['History']['content']);
-		
-				/**********************************
-					* conv: words to tokens
-				**********************************/
-				$tokens = Utils::conv_MecabWords_to_Tokens__V2($words, $tokens);
-// 				$tokens = $this->conv_MecabWords_to_Tokens__V2($words, $tokens);
-				// 			$tokens = $this->conv_MecabWords_to_Tokens($words);
-		
-				/**********************************
-					* save: tokens
-				**********************************/
-				$res = Utils::save_token_list($tokens, $history);
-				// 			$res = $this->save_token_list($tokens, $history['History']['id']);
-		
-				if ($res == true) {
-				
-					$count ++;
-				
-				} else {
-				
-					
-				}//if ($res == true)
-				
-			}//for ($i = 0; $i < count($words_ary); $i++)
-
-			debug("words_ary => ".count($words_ary)." / "."words saved => ".$count);
-			
-			/*******************************
-			 return
-			*******************************/
-			return $msg_Flash;
-			// 		return $history['History']['id'];
-		
-		}//save_Tokens
-
-		public static function
-		conv_MecabWords_to_Tokens__V2
-		($words, $token_list) {
-		
-			// 		$token_list = array();
-		
-			$counter = 0;
-		
-			foreach ($words as $w) {
-		
-				$token = new Token();
-		
-				/**********************************
-					* form
-				**********************************/
-				$token->form = $w->surface;
-				// 			$token->form = $w->surface;
-		
-				/**********************************
-					* features
-				**********************************/
-				// 			$token->hin = $w->feature;
-					
-				$tmp = explode(',', (string)$w->feature);
-				// 			$tmp = explode(',', $w->feature);
-		
-				// 			if ($counter < 20) {
-		
-				// 				debug((string)$w->surface);
-				// 				debug((string)$w->feature);
-				// // 				debug($w->surface);
-		
-				// // 				break;
-				// 			}
-					
-					
-					
-				// 			//log
-				// 			$msg = "count(\$tmp) => " + count($tmp);
-				// 			Utils::write_Log($this->path_Log, $msg, __FILE__, __LINE__);
-					
-				// 			debug($tmp);
-		
-				// 			if ($counter < 20) {
-					
-				// 				debug($tmp);
-				// 				// 				debug($w->surface);
-					
-				// 				// 				break;
-				// 			}
-		
-				if ($tmp == null || count($tmp) == 7 ) {
-					// 			if ($tmp == null || count($tmp) < 9) {
-		
-					$token->hin		= $tmp[0];
-		
-					$token->hin_1	= $tmp[1];
-					$token->hin_2	= $tmp[2];
-					$token->hin_3	= $tmp[3];
-		
-					$token->katsu_kei	= $tmp[4];
-					$token->katsu_kata	= $tmp[5];
-					$token->genkei	= $tmp[6];
-					$token->yomi	= "*";
-		
-					$token->hatsu	= "*";
-		
-					// 				debug($w->feature);
-		
-					// 				continue;
-		
-				} else if (count($tmp) == 9) {
-		
-					$token->hin		= $tmp[0];
-		
-					$token->hin_1	= $tmp[1];
-					$token->hin_2	= $tmp[2];
-					$token->hin_3	= $tmp[3];
-		
-					$token->katsu_kei	= $tmp[4];
-					$token->katsu_kata	= $tmp[5];
-					$token->genkei	= $tmp[6];
-					$token->yomi	= $tmp[7];
-		
-					$token->hatsu	= $tmp[8];
-		
-				} else {
-		
-					continue;
-		
-				}
-					
-				/**********************************
-					* hin
-				**********************************/
-					
-					
-					
-				array_push($token_list, $token);
-		
-				//test
-				$counter += 1;
-					
-				// 			if ($counter < 10) {
-		
-				// 				debug($token);
-		
-				// // 				break;
-				// 			}
-					
-			}//foreach ($words as $w)
-		
-			return $token_list;
-		
-		}//conv_MecabWords_to_Tokens
-
-		public static function
-		save_token_list
-		($tokens, $history) {
-			// 	($tokens, $history_id) {
-		
-			$history_id = $history['History']['id'];
-		
-			$category_id = $history['Category']['id'];
-		
-			$genre_id = $history['Category']['genre_id'];
-		
-			$counter = 0;
-		
-// 			$this->loadModel('Token');
-
-			$model = ClassRegistry::init('Token');
-		
-			foreach ($tokens as $token) {
-		
-				$model->create();
-// 				$this->Token->create();
-		
-				// 			$cat_id = $this->_save_Data_Keywords_from_CSV__Get_CatID_From_OrigID(
-				// 								$kw_pair[3], $categories);
-					
-				// 			// valiate
-				// 			if ($cat_id == false) {
-		
-				// 				continue;
-		
-				// 			}
-					
-				// build param
-				$param = array('Token' =>
-		
-						array(
-									
-								'created_at'	=> Utils::get_CurrentTime(),
-								'updated_at'	=> Utils::get_CurrentTime(),
-									
-								'form'			=> $token->form,
-									
-								'hin'			=> $token->hin,
-								'hin_1'			=> $token->hin_1,
-								'hin_2'			=> $token->hin_2,
-								'hin_3'			=> $token->hin_3,
-									
-								'katsu_kei'		=> $token->katsu_kei,
-								'katsu_kata'	=> $token->katsu_kata,
-								'genkei'		=> $token->genkei,
-								'yomi'			=> $token->yomi,
-								'hatsu'			=> $token->hatsu,
-									
-								'history_id'	=> $history_id,
-									
-								'category_id'	=> $category_id,
-								'genre_id'		=> $genre_id,
-									
-						)
-		
-				);
-					
-				if ($model->save($param)) {
-// 				if ($this->Token->save($param)) {
-		
-					$counter += 1;
-		
-				}
-		
-				// 			//test
-				// 			if ($counter > 20) {
-		
-				// 				break;
-		
-				// 			}
-					
-			}//foreach ($cat_pairs as $cat_pair)
-		
-			return $counter;
-		
-		}//save_token_list
-
 		/*******************************
 			if $target is not found in the array $tokens,<br>
 				=> returns -1
@@ -1951,9 +1566,17 @@
 		}//get_Tokens_from_CSV($smarty, $fname)
 
 		public static function
+		insertData_Tokens($smarty, $tokens) {
+			
+			
+			
+		}//insertData_Tokens($smarty, $tokens)
+		
+		public static function
 		save_Tokens_from_CSV($smarty) {
 
-			$dir_csv = "../data";
+			$dir_csv = "..".DIRECTORY_SEPARATOR."data";
+// 			$dir_csv = "../data";
 			
 			$dirlist = scandir($dir_csv);
 			
@@ -1979,23 +1602,97 @@
 			
 			echo "<br>"; echo "<br>";
 			
-			$fname = "../data/tokens_1.csv";
+			/*******************************
+				save: tokens
+			*******************************/
+			/*******************************
+				get: tokens list
+			*******************************/
+			$fname = implode(DIRECTORY_SEPARATOR, array($dir_csv, $csv_files[0]));
+// 			$fname = implode(DIRECTORY_SEPARATOR, array($dir_csv, $dirlist[0]));
+// 			$fname = $dirlist[0];
+			
+			printf("[%s : %d] opening a csv... %s", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+			
+			echo "<br>"; echo "<br>";
 			
 			$tokens = Utils::get_Tokens_from_CSV($smarty, $fname);
 			
-			if ($tokens == null) {
+			if ($tokens != null) {
 			
-				printf("[%s : %d] tokens => null",
-				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				printf("[%s : %d] tokens => %d (file=%s)", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+								__LINE__, count($tokens), $fname);
 			
 			} else {
 			
-				printf("[%s : %d] tokens => %d",
-				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
-					
-			}//if ($tokens == null)
+				printf("[%s : %d] tokens => null", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+			}//if ($tokens != null)
 			
 			echo "<br>"; echo "<br>";
+
+			/*******************************
+				save: tokens
+			*******************************/
+			$res = DB::save_Tokens($smarty, $tokens);
+// 			$res = Utils::insertData_Tokens($smarty, $tokens);
+			
+			printf("[%s : %d] save tokens => %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
+			
+			echo "<br>"; echo "<br>";
+
+// 			//test: rename
+// 			$res = 1;
+			
+			/*******************************
+				rename: file
+			*******************************/
+			if ($res > 0) {
+
+				$new_name = implode(DIRECTORY_SEPARATOR, array($dir_csv, "_".$csv_files[0]));
+				
+				$res = rename(
+							$fname, 
+							$new_name);
+// 							implode(DIRECTORY_SEPARATOR, array($dir_csv, "_".$csv_files[0])));
+// 							implode(DIRECTORY_SEPARATOR, array($dir_csv, "*".$csv_files[0])));
+				
+				if ($res == true) {
+				
+					printf("[%s : %d] csv renamed => %s", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+									__LINE__, 
+									$new_name);
+// 									implode(DIRECTORY_SEPARATOR, array($dir_csv, "*".$csv_files[0])));
+				
+				} else {
+				
+					printf	("[%s : %d] rename csv => failed: %s", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+					
+				}//if ($res == true)
+				
+				echo "<br>"; echo "<br>";
+				
+			}//if ($res > 0)
+			
+// 			if ($tokens == null) {
+			
+// 				printf("[%s : %d] tokens => null",
+// 				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+// 			} else {
+			
+// 				printf("[%s : %d] tokens => %d",
+// 				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
+					
+// 			}//if ($tokens == null)
+			
+// 			echo "<br>"; echo "<br>";
 			
 		}//save_Tokens_from_CSV
 		
