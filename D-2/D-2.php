@@ -464,6 +464,89 @@
 		
 	}//do_Job_D_2_V_3_0
 	
+	function 
+	do_Job_D_2_V_3_1() {
+
+		//test
+		
+		
+		/*******************************
+			dispatch
+		*******************************/
+		@$server_Name = $_SERVER['SERVER_NAME'];
+		
+		if ($server_Name == null) {
+		
+			printf("[%s : %d] servr name => null", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			echo "<br>"; echo "<br>";
+			
+			do_Job_D_2_V_2_0();
+			
+			return ;
+		
+		} else if ($server_Name != 'localhost') {
+
+			printf("[%s : %d] server is => $server_Name",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+			echo "<br>"; echo "<br>";
+				
+			do_Job_D_2_V_2_0();
+				
+			return ;
+			
+		}
+			
+		/*******************************
+			setup: smarty
+		*******************************/
+		$smarty = new Smarty();
+		
+		smarty_Setup($smarty);
+		
+		//debug
+		printf("[%s : %d] %s",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+		// 				Utils::get_Dirname(__FILE__, "Smarty"),
+		__LINE__, Utils::get_CurrentTime());
+		
+		echo "<br>"; echo "<br>";
+		
+		/*******************************
+		 db
+		*******************************/
+		execute_DB_Create_LocalDB($smarty);
+		// 	DB::setup_DB($smarty);
+		
+		/*******************************
+		 tpl name
+		*******************************/
+		$tpl_name = get_Tpl_Name();
+		
+		/*******************************
+		 assigns
+		*******************************/
+		if (!$smarty->isCached($tpl_name)) {
+		
+			echo "not cached => $tpl_name.tpl";
+		
+			smarty_Assign($smarty, $tpl_name);
+		
+		} else {
+		
+		echo "$tpl_name.tpl => cached";
+		
+		}
+		
+		/*******************************
+		view
+		*******************************/
+		execute_View($smarty, $tpl_name);
+		
+	}//do_Job_D_2_V_3_1
+	
 ?>
 
 <?php
@@ -475,6 +558,7 @@
 // 	require 'utils/utils.php';
 // 	require 'utils/DB.php';
 	
-	do_Job_D_2_V_3_0();
+	do_Job_D_2_V_3_1();
+// 	do_Job_D_2_V_3_0();
 // 	do_Job_D_2_V_2_0();
 // 	do_Job_D_2();
