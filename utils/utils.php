@@ -1771,6 +1771,233 @@
 			return $token;
 			
 		}//conv_Rows_2_Tokens
+
+		public static function
+		divide_CSV($smarty) {
+			
+			$numOf_Lines_PerFile = CONS::$numOf_Lines_PerFile;
+			
+			/*******************************
+			 open
+			*******************************/
+			$fname = "../data/tokens.csv";
+			
+			$f = fopen($fname, "r");
+			
+			if ($f == false) {
+					
+				printf("[%s : %d] open csv => false",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+					
+				echo "<br>";
+				echo "<br>";
+					
+				return ;
+					
+			} else {
+					
+				printf("[%s : %d] csv => opened: %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+			
+				echo "<br>"; echo "<br>";
+					
+			}
+				
+			/*******************************
+				get: header
+			*******************************/
+			$header = fgets($f);
+			
+			$line = fgets($f);		// first line
+			
+// 			printf("[%s : %d] header => %s", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $header);
+
+			/*******************************
+				read, write
+			*******************************/
+			$id = 1;
+			
+			$fname = "../data/tokens_$id.csv";
+				
+			$fout = fopen($fname, "w");
+			
+			fwrite($fout, $header);
+			
+			$count = 0;
+			
+			$total = 0;
+			
+			//REF fgets http://www.tizag.com/phpT/fileread.php
+			while ($line) {
+
+				if ($count >= $numOf_Lines_PerFile) {
+					
+					fclose($fout);
+					
+					$id ++;
+					
+					$fname = "../data/tokens_$id.csv";
+					
+					$fout = fopen($fname, "w");
+
+					printf("[%s : %d] new file opened => %s", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+									__LINE__, $fname);
+					
+					fwrite($fout, $header);
+					
+					$count = 0;
+					
+// 					break;
+					
+				}
+				
+				fwrite($fout, $line);
+				
+				$count ++;
+				
+				$total ++;
+				
+// 				if ($total > 30000) {
+					
+// 					break;;
+					
+// 				}
+				
+				$line = fgets($f);
+					
+			}//while (condition)
+			
+			/*******************************
+			 close
+			*******************************/
+			fclose($f);
+			
+			fclose($fout);
+			
+			printf("[%s : %d] csv => closed", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			echo "<br>"; echo "<br>";
+			
+		}//divide_CSV
+
+		/*******************************
+			@return
+			null	=> can't open the file
+		*******************************/
+		public static function
+		get_Tokens_from_CSV($smarty, $fname) {
+		
+			/*******************************
+			 open
+			*******************************/
+			$f = fopen($fname, "r");
+		
+			if ($f == false) {
+					
+				printf("[%s : %d] csv => false",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+					
+				echo "<br>";
+				echo "<br>";
+					
+				return null;
+					
+			} else {
+					
+				printf("[%s : %d] csv => opened: %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+		
+				echo "<br>"; echo "<br>";
+					
+			}
+		
+			/*******************************
+			 read: csv
+			*******************************/
+			$count = 0;
+			$len = -1;
+		
+			$data = fgetcsv($f, 500, ",");		// first line => header
+			$data = fgetcsv($f, 500, ",");		//
+		
+			$content = "";
+		
+			$tokens = array();
+		
+			//REF fgets http://www.tizag.com/phpT/fileread.php
+			while ($data) {
+		
+				$t = Utils::conv_Row_2_Token($smarty, $data);
+					
+				array_push($tokens, $t);
+					
+				$data = fgetcsv($f, 500, ",");
+				
+			}//while (condition)
+		
+			/*******************************
+			close
+			*******************************/
+			fclose($f);
+
+			/*******************************
+				return
+			*******************************/
+			return $tokens;
+			
+		}//get_Tokens_from_CSV($smarty, $fname)
+
+		public static function
+		save_Tokens_from_CSV($smarty) {
+
+			$dir_csv = "../data";
+			
+			$dirlist = scandir($dir_csv);
+			
+// 			var_dump($dirlist);
+			
+// 			echo "<br>"; echo "<br>";
+			
+			$csv_files = array();
+
+			$p = "/^tokens\_/";
+			
+			foreach ($dirlist as $name) {
+				
+				if (preg_match($p, $name) == 1) {
+					
+					array_push($csv_files, $name);
+					
+				};
+				
+			}
+			
+			var_dump($csv_files);
+			
+			echo "<br>"; echo "<br>";
+			
+			$fname = "../data/tokens_1.csv";
+			
+			$tokens = Utils::get_Tokens_from_CSV($smarty, $fname);
+			
+			if ($tokens == null) {
+			
+				printf("[%s : %d] tokens => null",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			} else {
+			
+				printf("[%s : %d] tokens => %d",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
+					
+			}//if ($tokens == null)
+			
+			echo "<br>"; echo "<br>";
+			
+		}//save_Tokens_from_CSV
 		
 	}//class Utils
 	
