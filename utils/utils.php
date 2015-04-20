@@ -1342,7 +1342,14 @@
 						->set_updated_at($r[2])
 						->set_form($r[3])
 						->set_hin($r[4])
-						->set_db_Id($r[0])
+						
+						->set_hin_1($r[5])
+						->set_hin_2($r[6])
+						->set_hin_3($r[7])
+						
+						->set_orig_id($r[0])
+						
+// 						->set_db_Id($r[0])
 				;
 				
 				array_push($tokens, $token);
@@ -1372,13 +1379,25 @@
 // 			$token = null;
 			
 			$token = new Token();
-			
+
 			$token->set_created_at($row[1])
 					->set_updated_at($row[2])
 					->set_form($row[3])
 					->set_hin($row[4])
-					->set_db_Id($row[0])
+					
+					->set_hin_1($row[5])
+					->set_hin_2($row[6])
+					->set_hin_3($row[7])
+					
+					->set_orig_id($row[0])
 			;
+				
+// 			$token->set_created_at($row[1])
+// 					->set_updated_at($row[2])
+// 					->set_form($row[3])
+// 					->set_hin($row[4])
+// 					->set_db_Id($row[0])
+// 			;
 			
 			/*******************************
 				return
@@ -1433,7 +1452,8 @@
 			*******************************/
 			$id = 1;
 			
-			$fname = "../data/tokens_$id.csv";
+			$fname = sprintf("../data/tokens_%02d.csv", $id);
+// 			$fname = "../data/tokens_$id.csv";
 				
 			$fout = fopen($fname, "w");
 			
@@ -1452,7 +1472,8 @@
 					
 					$id ++;
 					
-					$fname = "../data/tokens_$id.csv";
+// 					$fname = "../data/tokens_$id.csv";
+					$fname = sprintf("../data/tokens_%02d.csv", $id);
 					
 					$fout = fopen($fname, "w");
 

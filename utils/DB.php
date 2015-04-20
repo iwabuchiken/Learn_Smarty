@@ -420,6 +420,13 @@
 					
 				}
 				
+			} else {
+				
+				printf("[%s : %d] table exists => %s", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+				
+				echo "<br>"; echo "<br>";
+				
 			}
 
 			/*******************************
@@ -449,7 +456,10 @@
 						."("
 						." "
 							."id, created_at, updated_at, form"
-	// 						."hin, hin_1, hin_2, hin_3"
+							.", "
+							."hin, hin_1, hin_2, hin_3"
+							.", "
+							."orig_id"
 						." "
 						.")"
 						." "
@@ -457,8 +467,11 @@
 						." "
 						."("
 							.":id, :created_at, :updated_at, :form"
+							.", "
+							.":hin, :hin_1, :hin_2, :hin_3"
+							.", "
+							.":orig_id"
 	// 						.":id, :created_at, :updated_at, :form, "
-	// 						.":hin, :hin_1, :hin_2, :hin_3"
 						.")"
 					;
 	
@@ -484,10 +497,12 @@
 								':updated_at'	=> $t->get_updated_at(),
 						
 								':form'			=> $t->get_form(),
-	// 							':hin'			=> $t->get_hin(),
-	// 							':hin_1'		=> $t->get_hin_1(),
-	// 							':hin_2'		=> $t->get_hin_2(),
-	// 							':hin_3'		=> $t->get_hin_3(),
+								':hin'			=> $t->get_hin(),
+								':hin_1'		=> $t->get_hin_1(),
+								':hin_2'		=> $t->get_hin_2(),
+								':hin_3'		=> $t->get_hin_3(),
+						
+								':orig_id'		=> $t->get_orig_id(),
 								)
 				);
 				
@@ -498,6 +513,13 @@
 					
 					$count ++;
 
+// 					//debug
+// 					if ($count > 50) {
+						
+// 						break;
+						
+// 					}
+					
 					/*******************************
 						interim
 					*******************************/
@@ -645,6 +667,30 @@
 						."hin_2 VARCHAR(30)"
 						.", "
 						."hin_3 VARCHAR(30)"
+								
+						.", "
+						."katsu_kei VARCHAR(30)"
+						.", "
+						."katsu_kata VARCHAR(30)"
+						.", "
+						."genkei VARCHAR(30)"
+								
+						.", "
+						."yomi VARCHAR(30)"
+						.", "
+						."hatsu VARCHAR(30)"
+								
+						.", "
+						."history_id INT(11)"
+						.", "
+						."category_id INT(11)"
+						.", "
+						."genre_id INT(11)"
+						.", "
+						."user_id INT(11)"
+								
+						.", "
+						."orig_id INT(11)"
 					.")"
 			;
 
