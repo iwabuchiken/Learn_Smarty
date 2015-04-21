@@ -1331,6 +1331,15 @@
 			$tokens = array();
 			
 			$len = count($rows);
+
+// 			printf("[%s : %d] rows[10]", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__args);
+			
+// 			echo "<br>"; echo "<br>";
+			
+// 			var_dump($rows[10]);
+			
+			
 			
 			for ($i = 0; $i < $len; $i++) {
 				
@@ -1377,6 +1386,15 @@
 		conv_Row_2_Token($smarty, $row) {
 
 // 			$token = null;
+
+// 			echo "<br>"; echo "<br>";
+			
+// 			printf("[%s : %d] \$row", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+// 			echo "<br>"; echo "<br>";
+			
+// 			var_dump($row);
 			
 			$token = new Token();
 
@@ -1388,6 +1406,19 @@
 					->set_hin_1($row[5])
 					->set_hin_2($row[6])
 					->set_hin_3($row[7])
+					
+					->set_katsu_kei($row[8])
+					->set_katsu_kata($row[9])
+					->set_genkei($row[10])
+					
+					->set_yomi($row[11])
+					->set_hatsu($row[12])
+					
+					->set_history_id($row[13])
+					->set_category_id($row[14])
+					->set_genre_id($row[15])
+					
+					->set_user_id($row[16])
 					
 					->set_orig_id($row[0])
 			;
@@ -1574,6 +1605,14 @@
 				
 			}//while (condition)
 		
+// 			printf("[%s : %d] tokens[10]", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			
+// 			echo "<br>"; echo "<br>";
+			
+// 			var_dump($tokens[10]);
+			
 			/*******************************
 			close
 			*******************************/
@@ -1619,9 +1658,9 @@
 				
 			}
 			
-			var_dump($csv_files);
+// 			var_dump($csv_files);
 			
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 			
 			/*******************************
 				save: tokens

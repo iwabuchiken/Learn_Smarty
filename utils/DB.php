@@ -459,6 +459,14 @@
 							.", "
 							."hin, hin_1, hin_2, hin_3"
 							.", "
+							."katsu_kei, katsu_kata, genkei"
+							.", "
+							."yomi, hatsu"
+							.", "
+							."history_id, category_id, genre_id"
+							.", "
+							."user_id"
+							.", "
 							."orig_id"
 						." "
 						.")"
@@ -469,6 +477,14 @@
 							.":id, :created_at, :updated_at, :form"
 							.", "
 							.":hin, :hin_1, :hin_2, :hin_3"
+							.", "
+							.":katsu_kei, :katsu_kata, :genkei"
+							.", "
+							.":yomi, :hatsu"
+							.", "
+							.":history_id, :category_id, :genre_id"
+							.", "
+							.":user_id"
 							.", "
 							.":orig_id"
 	// 						.":id, :created_at, :updated_at, :form, "
@@ -491,6 +507,9 @@
 					
 				}
 				
+// 				//debug
+// 				var_dump($t);
+				
 				$res = $q->execute(array(
 	// 							':id'			=> $t->get_db_Id(),
 								':created_at'	=> $t->get_created_at(),
@@ -501,6 +520,17 @@
 								':hin_1'		=> $t->get_hin_1(),
 								':hin_2'		=> $t->get_hin_2(),
 								':hin_3'		=> $t->get_hin_3(),
+						
+								':katsu_kei'	=> $t->get_katsu_kei(),
+								':katsu_kata'		=> $t->get_katsu_kata(),
+								':genkei'		=> $t->get_genkei(),
+						
+								':yomi'			=> $t->get_yomi(),
+								':hatsu'		=> $t->get_hatsu(),
+						
+								':history_id'	=> $t->get_history_id(),
+								':category_id'	=> $t->get_category_id(),
+								':genre_id'		=> $t->get_genre_id(),
 						
 								':orig_id'		=> $t->get_orig_id(),
 								)
@@ -514,7 +544,7 @@
 					$count ++;
 
 // 					//debug
-// 					if ($count > 50) {
+// 					if ($count > 5) {
 						
 // 						break;
 						

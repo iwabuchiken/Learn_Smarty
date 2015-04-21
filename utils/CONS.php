@@ -9,6 +9,8 @@ class CONS {
 	
 	public static $numOf_Modulus = 40;
 	
+	public static $server_Local = "localhost";
+	
 	/******************************
 	
 		Paths and names

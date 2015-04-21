@@ -595,22 +595,34 @@
 		/*******************************
 			build: tokens
 		*******************************/
-		$start = time();
+		@$numOf_Files = $_REQUEST['numof_files'];
 		
-// 		for ($i = 0; $i < 40000000; $i++) {
+		if ($numOf_Files == null) {
 			
-// 		}
+			$numOf_Files = 1;
+			
+		}
 		
-		$res = Utils::save_Tokens_from_CSV($smarty);
+		for ($i = 0; $i < $numOf_Files; $i++) {
+			
+			$start = time();
+			
+	// 		for ($i = 0; $i < 40000000; $i++) {
+				
+	// 		}
+			
+			$res = Utils::save_Tokens_from_CSV($smarty);
+			
+			$end = time();
+			
+			printf("[%s : %d] time => %s", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+							__LINE__, date('H:i:s', $end - $start - (9*60*60)));
+	// 						__LINE__, date('m/d/Y H:i:s', $end - $start));
+			
+			echo "<br>"; echo "<br>";
 		
-		$end = time();
-		
-		printf("[%s : %d] time => %s", 
-						Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
-						__LINE__, date('H:i:s', $end - $start - (9*60*60)));
-// 						__LINE__, date('m/d/Y H:i:s', $end - $start));
-		
-		echo "<br>"; echo "<br>";
+		}
 		
 		/*******************************
 		 tpl name
