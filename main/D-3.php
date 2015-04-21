@@ -247,30 +247,30 @@
 	function 
 	do_Job_D_3_V_1_0() {
 
-		/*******************************
-		 server
-		*******************************/
-		@$server_Name = $_SERVER['SERVER_NAME'];
+// 		/*******************************
+// 		 server
+// 		*******************************/
+// 		@$server_Name = $_SERVER['SERVER_NAME'];
 		
-		if ($server_Name == null) {
+// 		if ($server_Name == null) {
 		
-			printf("[%s : %d] servr name => null",
-			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+// 			printf("[%s : %d] servr name => null",
+// 			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 				
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 				
-			do_Job_D_2_V_2_0();
+// 			do_Job_D_2_V_2_0();
 				
-			return ;
+// 			return ;
 		
-		} else if ($server_Name != CONS::$server_Local) {
+// 		} else if ($server_Name != CONS::$server_Local) {
 		
-			printf("[%s : %d] server is => $server_Name",
-			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+// 			printf("[%s : %d] server is => $server_Name",
+// 			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 		
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 				
-		}
+// 		}
 			
 		/*******************************
 			setup: smarty
@@ -288,34 +288,25 @@
 		echo "<br>"; echo "<br>";
 
 		/*******************************
-			build: tokens
+			tokens: of a category
 		*******************************/
 		$start = time();
 
-		/*******************************
-			tokens: of a category
-		*******************************/
-// 		// cat id
-// 		if ($server_Name == CONS::$server_Local) {
+		$cat_id = 15;
 		
-// 			$cat_id = 
-		
-// 		} else {
-		
-// 			line2
-			
-// 		}//if ($server_Name == CONS::$server_Local)
-		
-		
-		
-// 		$tokens = Utils::find_Tokens_from_CatId($cat_id);
-		
+		$tokens = DB::findAll_Tokens_from_CatID($cat_id);
 		
 		$end = time();
+		
 		
 		printf("[%s : %d] time => %s", 
 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
 						__LINE__, date('H:i:s', $end - $start - (9*60*60)));
+		
+		echo "<br>"; echo "<br>";
+		
+		printf("[%s : %d] tokens => %d", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
 		
 		echo "<br>"; echo "<br>";
 		
@@ -349,7 +340,7 @@
 		execute_View($smarty, $tpl_name);
 		
 	}//do_Job_D_3_V_1_0
-	
+
 ?>
 
 <?php
