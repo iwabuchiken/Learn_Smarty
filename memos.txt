@@ -1,0 +1,3 @@
+[console]
+
+php C:\WORKS\WS\Eclipse_Luna\Smarty\test.php

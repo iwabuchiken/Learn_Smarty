@@ -1356,6 +1356,19 @@
 						->set_hin_2($r[6])
 						->set_hin_3($r[7])
 						
+						->set_katsu_kei($r[8])
+						->set_katsu_kata($r[9])
+						->set_genkei($r[10])
+							
+						->set_yomi($r[11])
+						->set_hatsu($r[12])
+							
+						->set_history_id($r[13])
+						->set_category_id($r[14])
+						->set_genre_id($r[15])
+							
+						->set_user_id($r[16])
+						
 						->set_orig_id($r[0])
 						
 // 						->set_db_Id($r[0])
@@ -1369,6 +1382,8 @@
 					Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
 					__LINE__, count($tokens));
 
+			echo "<br>"; echo "<br>";
+			
 			/*******************************
 				return
 			*******************************/

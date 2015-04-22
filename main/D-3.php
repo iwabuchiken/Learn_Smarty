@@ -59,11 +59,25 @@
 	function smarty_Setup($smarty) {
 
 		$smarty->setCaching(true);
+
+		/*
+		 * "../libs"	=> "../" needed
+		 * 					to use templates dir under ".../Smarty/libs/templates"
+		 */
+// 		$smarty->setTemplateDir('../libs/templates');
+// 		$smarty->setCompileDir('../libs/templates_c');
+// 		$smarty->setCacheDir('../libs/cache');
+// 		$smarty->setConfigDir('../libs/configs');
 		
 		$smarty->setTemplateDir('libs/templates');
 		$smarty->setCompileDir('libs/templates_c');
 		$smarty->setCacheDir('libs/cache');
 		$smarty->setConfigDir('libs/configs');
+
+		/*******************************
+			cache: clear
+		*******************************/
+		$smarty->clearAllCache();
 		
 	}
 
@@ -85,19 +99,81 @@
 		
 	}
 
-	function execute_View($smarty, $tpl_name) {
+	function 
+	execute_View($smarty, $tpl_name) {
 
-		$smarty->display("../templates/D-1/$tpl_name.tpl");	//=> no
+		printf("[%s : %d] tpl_name => %s", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tpl_name);
+		
+		
+		echo "<br>"; echo "<br>";
+		
+// 		$smarty->display("/$tpl_name");	//=> 
+// 		$smarty->display("../templates/$tpl_name");	//=> w
+// 		$smarty->display("../templates/D-1/$tpl_name.tpl");	//=> w
+// 		$smarty->display("../libs/templates/$tpl_name");	//=> no
 // 		$smarty->display("templates/D-1/$tpl_name.tpl");	//=> no
 // 		$smarty->display("D-1/$tpl_name.tpl");	//=> n/w
 		
-		$smarty->assign('tpl_name', "D-1/$tpl_name.tpl");
+		$p = "/([^\/]+)(?=\.tpl$)/i";
+// 		$p = "/\/([a-zA-Z_0-9.]+?)\.tpl/";
+// 		$p = "/\/(.+)\.tpl/";
+		
+		preg_match($p, $tpl_name, $matches);
+		
+		var_dump($matches);
+		
+		echo "<br>"; echo "<br>";
+		
+		printf("[%s : %d] matches => %d", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($matches));
+		
+		echo "<br>"; echo "<br>";
+		
+		if (count($matches) > 0) {
+			
+			$tpl_name_edited = $matches[1];
+			
+		} else {
+			
+			$tpl_name_edited = $tpl_name;
+			
+		}
+
+		printf("[%s : %d] \$tpl_name_edited => %s", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tpl_name_edited);
+		
+		echo "<br>"; echo "<br>";
+		
+		/*******************************
+			clear: cache
+		*******************************/
+		//REF clear cache http://stackoverflow.com/questions/5395377/how-to-clear-smartys-cache answered Mar 22 '11 at 17:31
+// 		$smarty->clearAllCache();
+// 		$smarty->clear_all_cache();	//=> Smarty: Call of unknown method 'clear_all_cache'.
+		
+		$tpl_name_edited .= "???";
+		
+// 		$smarty->assign('tpl_name', "abc???");	//=> n/w
+// 		$smarty->assign('tpl_name', $tpl_name_edited." !!!");	//=> n/w
+		$smarty->assign('tpl_name', $tpl_name_edited);		//=> w
+// 		$smarty->assign('tpl_name', "$tpl_name_edited");	//=> w
+		
+		$smarty->assign('title', $tpl_name_edited);
+		
+		$smarty->assign('path_css', "/Smarty/main/libs/templates/rsc/css/main.css");
+		
+		
+		/*******************************
+			disp
+		*******************************/
+		$smarty->display("../templates/$tpl_name");	//=> w
 		
 		echo "<hr>";
 		echo "<br>";
 		echo "done (".__FILE__.")";
 		
-	}	
+	}//execute_View($smarty, $tpl_name)
 
 	function execute_DB($smarty) {
 
@@ -293,8 +369,16 @@
 		$start = time();
 
 		$cat_id = 15;
+
+		printf("[%s : %d] cat_id => %d", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $cat_id);
 		
-		$tokens = DB::findAll_Tokens_from_CatID($cat_id);
+		
+		echo "<br>"; echo "<br>";
+		
+		
+		
+		$tokens = DB::findAll_Tokens_from_CatID($smarty, $cat_id);
 		
 		$end = time();
 		
@@ -310,6 +394,11 @@
 		
 		echo "<br>"; echo "<br>";
 		
+// 		var_dump($tokens[10]);
+		
+		echo "<br>"; echo "<br>";
+		
+		
 		/*******************************
 		 tpl name
 		*******************************/
@@ -324,7 +413,7 @@
 
 			echo "<br>"; echo "<br>";
 			
-			smarty_Assign($smarty, $tpl_name);
+// 			smarty_Assign($smarty, $tpl_name);
 		
 		} else {
 		
@@ -337,6 +426,21 @@
 		/*******************************
 		view
 		*******************************/
+// 		$smarty->setTemplateDir('libs/templates/D-1');
+		
+// 		$tpl_name = "D-3/parent.tpl";	//	 
+// 		$tpl_name = "D-3/index_table.tpl";	//	n/w 
+// 		$tpl_name = "index/$tpl_name.tpl";		//	n/w 
+// 		$tpl_name = "D-1/index/$tpl_name.tpl";		//	n/w 
+// 		$tpl_name = "D-1/$tpl_name.tpl";		// w
+// 		$tpl_name = "D-3/$tpl_name.tpl";		// w
+// 		$tpl_name = "D-3\\index\\index_table.tpl";	// n/w
+		$tpl_name = "D-3/index/index_table.tpl";	// w
+// 		$tpl_name = "D-3/index/index_table.tpl";	// n/w
+// 		$tpl_name = "D-3/index/index_table.tpl";	// n/w
+// 		../templates/$tpl_name
+// 		$smarty->display("../templates/D-1/$tpl_name.tpl");	//=> w
+
 		execute_View($smarty, $tpl_name);
 		
 	}//do_Job_D_3_V_1_0

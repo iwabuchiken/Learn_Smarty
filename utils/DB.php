@@ -316,7 +316,7 @@
 			Array of fetched rows
 		*******************************/
 		public static function
-		findAll_Tokens_from_CatID($cat_id) {
+		findAll_Tokens_from_CatID($smarty, $cat_id) {
 			
 			/*******************************
 				get: db
@@ -407,9 +407,15 @@
 			$db = null;
 
 			/*******************************
+				conv: rows to tokens
+			*******************************/
+			$tokens = Utils::conv_Rows_2_Tokens($smarty, $rows);
+			
+			/*******************************
 				return
 			*******************************/
-			return $rows;
+			return $tokens;
+// 			return $rows;
 			
 		}//findAll_Tokens_from_CatID
 
