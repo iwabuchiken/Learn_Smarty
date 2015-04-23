@@ -1,6 +1,7 @@
 <?php
 
 	require_once 'CONS.php';
+	require_once 'models/Histo.php';
 	
 	class Utils {
 		
@@ -1770,6 +1771,200 @@
 // 			echo "<br>"; echo "<br>";
 			
 		}//save_Tokens_from_CSV
+
+		public static function
+		get_ServerName() {
+			
+			@$server_Name = $_SERVER['SERVER_NAME'];
+// 			@$server_Name = $_SERVER['SERVER_NAME'];
+			
+			return $server_Name;
+			
+// 			if ($server_Name == null) {
+			
+// 			} else if ($server_Name != 'localhost') {
+			
+					
+// 			}
+			
+		}//get_ServerName
+
+		public static function 
+		comp_Histogram($h1, $h2) {
+			
+			return $h1['histo'] < $h2['histo'] ?  1 : -1; 
+			
+		}
+		
+		public static function
+		get_Histogram($tokens) {
+			
+			/*******************************
+				setup
+			*******************************/
+			$histo = array();
+
+			$nouns = array();
+			
+			/*******************************
+				get: nouns list
+			*******************************/
+			for ($i = 0; $i < count($tokens); $i++) {
+				
+				$t = $tokens[$i];
+
+				
+				if ($t->get_hin() == "名詞") {
+
+					$h = new Histo();
+					
+					$h->set_form($t->get_form());
+					$h->set_hin($t->get_hin());
+					$h->set_hin_1($t->get_hin_1());
+					$h->set_hin_2($t->get_hin_2());
+					
+					array_push($nouns, $h);
+					
+				}
+				
+			}//for ($i = 0; $i < count($tokens); $i++)
+
+			printf("[%s : %d] nouns => %d\n", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($nouns));
+			
+			echo "<br>"; echo "<br>";
+			
+			/*******************************
+				nouns list => skim
+			*******************************/
+			$nouns_skimmed = array();
+			
+			for ($i = 0; $i < count($nouns); $i++) {
+				
+				$n = $nouns[$i];
+				
+				if (!in_array($n, $nouns_skimmed)) {
+					
+					array_push($nouns_skimmed, $n);
+					
+				}
+				
+			}
+			
+			printf("[%s : %d] nouns skimmed => %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+							__LINE__, count($nouns_skimmed));
+			
+			echo "<br>"; echo "<br>";
+			
+			/*******************************
+				build: histogram
+			*******************************/
+			for ($i = 0; $i < count($nouns_skimmed); $i++) {
+				
+				$s = $nouns_skimmed[$i];
+				
+// 				$histo[$s] = 0;		//=> Illegal offset type
+				$histo[$s->get_form()] = array("hin_1" => null, "histo" => 0);
+				
+			}
+
+// // 			print_r($histo[$nouns_skimmed[0]->get_form()]['histo']);
+// 			print_r($histo[$nouns_skimmed[0]->get_form()]);
+
+// 			echo "<br>"; echo "<br>";
+
+// 			printf("[%s : %d] array_slice(\$histo, 0, 5)", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+// 			echo "<br>"; echo "<br>";
+			
+			
+// 			print_r(array_slice($histo, 0, 5));
+			
+// 			echo "<br>"; echo "<br>";
+			
+			for ($i = 0; $i < count($nouns); $i++) {
+				
+				$n = $nouns[$i];
+				
+				for ($j = 0; $j < count($nouns_skimmed); $j++) {
+					
+					$s = $nouns_skimmed[$j];
+					
+					if ($s->get_form() == $n->get_form()) {
+
+						if ($histo[$s->get_form()]['hin_1'] == null) {
+							
+							$histo[$s->get_form()]['hin_1'] = $s->get_hin_1();
+							
+						}
+						
+						$histo[$s->get_form()]['histo'] ++;
+						
+// 						$s->set_histo($s->get_histo + 1);
+						
+						break;
+						
+					}
+					
+				}
+				
+			}
+			
+			echo "<br>"; echo "<br>";
+			
+// 			printf("[%s : %d] \$nouns_skimmed[0]->get_form() => %s", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $nouns_skimmed[0]->get_form());
+			
+// 			echo "<br>"; echo "<br>";
+			
+			printf("[%s : %d] array_slice(\$histo, 0,3)", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			echo "<br>"; echo "<br>";
+			
+			print_r(array_slice($histo, 0,3));
+// 			print_r($histo[$nouns_skimmed[0]->get_form()]);
+			
+			echo "<br>"; echo "<br>";
+			
+			
+			/*******************************
+				sort: histo
+			*******************************/
+
+			uasort($histo, array("Utils", "comp_Histogram"));	//=> 
+			//REF php version http://stackoverflow.com/questions/4949573/parse-error-syntax-error-unexpected-t-function-line-10-help answered Feb 9 '11 at 19:37
+// 			uasort($histo, "comp_Histogram");	//=> uasort() expects parameter 2 to be a valid callback, function 'comp_Histogram' not found or invalid function name
+// 			uasort($histo, 'comp_Histogram');	//=> uasort() expects parameter 2 to be a valid callback, function 'comp_Histogram' not found or invalid function name
+// 			uasort($histo, array($this, "comp_Histogram"));	//=> Undefined variable: this
+// 			uasort($histo, "comp_Histogram");
+// 			uasort($histo, "&comp_Histogram");
+			//REF http://stackoverflow.com/questions/15618266/usort-not-working-after-array answered Mar 25 '13 at 15:34
+// 			uasort($histo, "comp_Histogram");
+// 			uasort($histo, comp_Histogram($h1, $h2));
+// 			uasort($histo, function($h1, $h2){ return $h1['histo'] < $h2['histo'] ?  1 : -1; });
+// 			usort($histo, function($h1, $h2){ return $h1['histo'] < $h2['histo'] ?  1 : -1; });
+// 			usort($histo, function($h1, $h2){ return $h1['histo'] > $h2['histo'] ?  1 : -1; });
+			
+// 			$keys = array_keys($histo);
+			
+// 			print_r(array_slice($keys, 0, 10));
+				
+// 			echo "<br>"; echo "<br>";
+			
+			print_r(array_slice($histo, 0,10));
+// 			print_r(array_slice($histo, 0,3));
+				
+			echo "<br>"; echo "<br>";
+			
+			/*******************************
+				return
+			*******************************/
+			return null;
+			
+		}//get_Histogram
 		
 	}//class Utils
 	

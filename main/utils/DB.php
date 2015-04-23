@@ -1,6 +1,7 @@
 <?php
 
-	require '../models/Token.php';
+	require 'models/Token.php';		//=> relative to D-3.php, not DB.php
+// 	require '../models/Token.php';
 	
 	class DB {
 
