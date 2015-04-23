@@ -1803,104 +1803,302 @@
 				setup
 			*******************************/
 			$histo = array();
+			
+			$histo_2 = array();
 
 			$nouns = array();
 			
 			/*******************************
 				get: nouns list
 			*******************************/
+// 			for ($i = 0; $i < count($tokens); $i++) {
+				
+// 				$t = $tokens[$i];
+
+				
+// 				if ($t->get_hin() == "名詞") {
+
+// 					$h = new Histo();
+					
+// 					$h->set_form($t->get_form());
+// 					$h->set_hin($t->get_hin());
+// 					$h->set_hin_1($t->get_hin_1());
+// 					$h->set_hin_2($t->get_hin_2());
+					
+// 					array_push($nouns, $h);
+					
+// 				}
+				
+// 			}//for ($i = 0; $i < count($tokens); $i++)
+
+// 			printf("[%s : %d] nouns => %d\n", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($nouns));
+			
+// 			echo "<br>"; echo "<br>";
+			
+// // 			var_dump(array_slice($nouns, 0, 3));
+			
+// // 			echo "<br>"; echo "<br>";
+			
+			
+			
+			////////////////////////////////
+			//test
+			////////////////////////////////
+			$s = "";
+			
+// 			$hin = array();
+			$hin = "";
+			$hin_1 = "";
+			$hin_2 = "";
+			$hin_3 = "";
+			
+			$nouns_2 = array();
+			
 			for ($i = 0; $i < count($tokens); $i++) {
-				
+					
 				$t = $tokens[$i];
-
-				
+					
 				if ($t->get_hin() == "名詞") {
+// 				if ($t['Token']['hin'] == "名詞") {
+			
+					$s .= $t->get_form();
+// 					$s .= $t['Token']['form'];
+			
+// 					array_push($hin, $t->get_hin());
+// 					$hin = $t->get_hin();		//=> w
+					$hin .= $t->get_hin()."/";
+					$hin_1 .= $t->get_hin_1()."/";
+					$hin_2 .= $t->get_hin_2()."/";
+					$hin_3 .= $t->get_hin_3()."/";
+					
+					continue;
+			
+				} else {
+			
+					if ($s == "") {
+			
+						continue;
+			
+					} else {
+			
+						// 					if ($s != null) {	//=> w
+						// 					if ($s != null && $s != "") {	//=> w
+						if ($s != null && $s != "" && $s != -1) {	//=> w
+							// 					if ($s != null && $s != "" && $s != -1 && $s != 0) {	//=> debug displayed
+							// 					if ($s != null && $s != "" && $s != -1 && $s != 0) {
+							// 					if ($s != "０" && $s != "0") {
+							// 					if ($s != "０") {
+			
+							// 						debug($s);
+			
+							$tmp = new Histo();
+							
+							$tmp->set_form($s);
+							$tmp->set_hin($hin);
+							$tmp->set_hin_1($hin_1);
+							$tmp->set_hin_2($hin_2);
+							$tmp->set_hin_3($hin_3);
+							
+							array_push($nouns_2, $tmp);
+// 							array_push($nouns_2, $s);;
+			
+						} else {
+			
+							debug($s);
+			
+						}
+							
+						// 					array_push($nouns, $s);
+							
+						$s = "";
 
-					$h = new Histo();
+						$hin = "";
+						$hin_1 = "";
+						$hin_2 = "";
+						$hin_3 = "";
+						
+						continue;
+			
+					}//if ($s == "")
+			
+				}//if ($t['Tokens']['hin'] == "名詞")
 					
-					$h->set_form($t->get_form());
-					$h->set_hin($t->get_hin());
-					$h->set_hin_1($t->get_hin_1());
-					$h->set_hin_2($t->get_hin_2());
-					
-					array_push($nouns, $h);
-					
-				}
-				
 			}//for ($i = 0; $i < count($tokens); $i++)
 
-			printf("[%s : %d] nouns => %d\n", 
-							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($nouns));
+			printf("[%s : %d] nouns_2 => %d\n",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($nouns_2));
+				
+			echo "<br>"; echo "<br>";
+
+			printf("[%s : %d] nouns_2 => ", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
 			
 			echo "<br>"; echo "<br>";
+			
+			var_dump(array_slice($nouns_2, 0, 3));
+			
 			
 			/*******************************
 				nouns list => skim
 			*******************************/
-			$nouns_skimmed = array();
+// 			$nouns_skimmed = array();
 			
-			for ($i = 0; $i < count($nouns); $i++) {
+// 			for ($i = 0; $i < count($nouns); $i++) {
 				
-				$n = $nouns[$i];
+// 				$n = $nouns[$i];
 				
-				if (!in_array($n, $nouns_skimmed)) {
+// 				if (!in_array($n, $nouns_skimmed)) {
 					
-					array_push($nouns_skimmed, $n);
+// 					array_push($nouns_skimmed, $n);
+					
+// 				}
+				
+// 			}
+			
+// 			printf("[%s : %d] nouns skimmed => %d", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+// 							__LINE__, count($nouns_skimmed));
+			
+// 			echo "<br>"; echo "<br>";
+
+			/////////////////////////////////
+			//test
+			
+			$nouns_skimmed_2 = array();
+			
+			for ($i = 0; $i < count($nouns_2); $i++) {
+				
+				$n = $nouns_2[$i];
+				
+				if (!in_array($n, $nouns_skimmed_2)) {
+					
+					array_push($nouns_skimmed_2, $n);
 					
 				}
 				
 			}
 			
-			printf("[%s : %d] nouns skimmed => %d", 
+			printf("[%s : %d] nouns skimmed_2 => %d", 
 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
-							__LINE__, count($nouns_skimmed));
+							__LINE__, count($nouns_skimmed_2));
 			
 			echo "<br>"; echo "<br>";
 			
 			/*******************************
 				build: histogram
 			*******************************/
-			for ($i = 0; $i < count($nouns_skimmed); $i++) {
+// 			for ($i = 0; $i < count($nouns_skimmed); $i++) {
 				
-				$s = $nouns_skimmed[$i];
+// 				$s = $nouns_skimmed[$i];
 				
-// 				$histo[$s] = 0;		//=> Illegal offset type
-				$histo[$s->get_form()] = array("hin_1" => null, "histo" => 0);
+// // 				$histo[$s] = 0;		//=> Illegal offset type
+// 				$histo[$s->get_form()] = array("hin_1" => null, "histo" => 0);
 				
-			}
+// 			}
 
-// // 			print_r($histo[$nouns_skimmed[0]->get_form()]['histo']);
-// 			print_r($histo[$nouns_skimmed[0]->get_form()]);
+// 			for ($i = 0; $i < count($nouns); $i++) {
+				
+// 				$n = $nouns[$i];
+				
+// 				for ($j = 0; $j < count($nouns_skimmed); $j++) {
+					
+// 					$s = $nouns_skimmed[$j];
+					
+// 					if ($s->get_form() == $n->get_form()) {
 
+// 						if ($histo[$s->get_form()]['hin_1'] == null) {
+							
+// 							$histo[$s->get_form()]['hin_1'] = $s->get_hin_1();
+							
+// 						}
+						
+// 						$histo[$s->get_form()]['histo'] ++;
+						
+// // 						$s->set_histo($s->get_histo + 1);
+						
+// 						break;
+						
+// 					}
+					
+// 				}
+				
+// 			}
+			
 // 			echo "<br>"; echo "<br>";
-
-// 			printf("[%s : %d] array_slice(\$histo, 0, 5)", 
+			
+// 			printf("[%s : %d] array_slice(\$histo, 0,3)", 
 // 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 			
 // 			echo "<br>"; echo "<br>";
 			
-			
-// 			print_r(array_slice($histo, 0, 5));
+// 			print_r(array_slice($histo, 0,3));
+// // 			print_r($histo[$nouns_skimmed[0]->get_form()]);
 			
 // 			echo "<br>"; echo "<br>";
 			
-			for ($i = 0; $i < count($nouns); $i++) {
+			/////////////////////////////////
+			//test
+			/////////////////////////////////
+			for ($i = 0; $i < count($nouns_skimmed_2); $i++) {
 				
-				$n = $nouns[$i];
+				$s = $nouns_skimmed_2[$i];
 				
-				for ($j = 0; $j < count($nouns_skimmed); $j++) {
+// 				$histo_2[$s] = 0;		//=> Illegal offset type
+				$histo_2[$s->get_form()] = array(
+									"form" => null, 
+									"hin" => null, 
+									"hin_1" => null, 
+									"hin_2" => null, 
+									"hin_3" => null, 
+									"histo" => 0
+				);
+// 				$histo_2[$s->get_form()] = array("hin_1" => null, "histo" => 0);
+				
+			}
+
+			for ($i = 0; $i < count($nouns_2); $i++) {
+				
+				$n = $nouns_2[$i];
+				
+				for ($j = 0; $j < count($nouns_skimmed_2); $j++) {
 					
-					$s = $nouns_skimmed[$j];
+					$s = $nouns_skimmed_2[$j];
 					
 					if ($s->get_form() == $n->get_form()) {
 
-						if ($histo[$s->get_form()]['hin_1'] == null) {
+						if ($histo_2[$s->get_form()]['form'] == null) {
 							
-							$histo[$s->get_form()]['hin_1'] = $s->get_hin_1();
+							$histo_2[$s->get_form()]['form'] = $s->get_form();
 							
 						}
 						
-						$histo[$s->get_form()]['histo'] ++;
+						if ($histo_2[$s->get_form()]['hin'] == null) {
+							
+							$histo_2[$s->get_form()]['hin'] = $s->get_hin();
+							
+						}
+						
+						if ($histo_2[$s->get_form()]['hin_1'] == null) {
+							
+							$histo_2[$s->get_form()]['hin_1'] = $s->get_hin_1();
+							
+						}
+						
+						if ($histo_2[$s->get_form()]['hin_2'] == null) {
+							
+							$histo_2[$s->get_form()]['hin_2'] = $s->get_hin_2();
+							
+						}
+						
+						if ($histo_2[$s->get_form()]['hin_3'] == null) {
+							
+							$histo_2[$s->get_form()]['hin_3'] = $s->get_hin_3();
+							
+						}
+						
+						$histo_2[$s->get_form()]['histo'] ++;
 						
 // 						$s->set_histo($s->get_histo + 1);
 						
@@ -1914,18 +2112,13 @@
 			
 			echo "<br>"; echo "<br>";
 			
-// 			printf("[%s : %d] \$nouns_skimmed[0]->get_form() => %s", 
-// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $nouns_skimmed[0]->get_form());
-			
-// 			echo "<br>"; echo "<br>";
-			
-			printf("[%s : %d] array_slice(\$histo, 0,3)", 
+			printf("[%s : %d] array_slice(\$histo_2, 0,3)", 
 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 			
 			echo "<br>"; echo "<br>";
 			
-			print_r(array_slice($histo, 0,3));
-// 			print_r($histo[$nouns_skimmed[0]->get_form()]);
+			print_r(array_slice($histo_2, 0,3));
+// 			print_r($histo[$nouns_skimmed_2[0]->get_form()]);
 			
 			echo "<br>"; echo "<br>";
 			
@@ -1934,27 +2127,53 @@
 				sort: histo
 			*******************************/
 
-			uasort($histo, array("Utils", "comp_Histogram"));	//=> 
-			//REF php version http://stackoverflow.com/questions/4949573/parse-error-syntax-error-unexpected-t-function-line-10-help answered Feb 9 '11 at 19:37
-// 			uasort($histo, "comp_Histogram");	//=> uasort() expects parameter 2 to be a valid callback, function 'comp_Histogram' not found or invalid function name
-// 			uasort($histo, 'comp_Histogram');	//=> uasort() expects parameter 2 to be a valid callback, function 'comp_Histogram' not found or invalid function name
-// 			uasort($histo, array($this, "comp_Histogram"));	//=> Undefined variable: this
-// 			uasort($histo, "comp_Histogram");
-// 			uasort($histo, "&comp_Histogram");
-			//REF http://stackoverflow.com/questions/15618266/usort-not-working-after-array answered Mar 25 '13 at 15:34
-// 			uasort($histo, "comp_Histogram");
-// 			uasort($histo, comp_Histogram($h1, $h2));
-// 			uasort($histo, function($h1, $h2){ return $h1['histo'] < $h2['histo'] ?  1 : -1; });
-// 			usort($histo, function($h1, $h2){ return $h1['histo'] < $h2['histo'] ?  1 : -1; });
-// 			usort($histo, function($h1, $h2){ return $h1['histo'] > $h2['histo'] ?  1 : -1; });
+// 			//REF http://stackoverflow.com/questions/6419818/php-usort-wont-sort answered Jun 21 '11 at 4:17
+// 			//REF php version http://stackoverflow.com/questions/4949573/parse-error-syntax-error-unexpected-t-function-line-10-help answered Feb 9 '11 at 19:37
+// 			uasort($histo, array("Utils", "comp_Histogram"));	//=> 
 			
-// 			$keys = array_keys($histo);
+// 			printf("[%s : %d] histo => sorted", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 			
-// 			print_r(array_slice($keys, 0, 10));
-				
 // 			echo "<br>"; echo "<br>";
 			
-			print_r(array_slice($histo, 0,10));
+// 			print_r(array_slice($histo, 0,10));
+// // 			print_r(array_slice($histo, 0,3));
+				
+// 			echo "<br>"; echo "<br>";
+
+			////////////////////////////
+			// test
+			////////////////////////////
+			
+			//REF http://stackoverflow.com/questions/6419818/php-usort-wont-sort answered Jun 21 '11 at 4:17
+			//REF php version http://stackoverflow.com/questions/4949573/parse-error-syntax-error-unexpected-t-function-line-10-help answered Feb 9 '11 at 19:37
+			uasort($histo_2, array("Utils", "comp_Histogram"));	//=> 
+			
+			printf("[%s : %d] histo_2 => sorted", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			echo "<br>"; echo "<br>";
+
+			$keys = array_keys($histo_2);
+			
+			for ($i = 0; $i < 10; $i++) {
+				
+				$h = $histo_2[$keys[$i]];
+// 				$h = $histo_2[$i];
+				
+				printf("[%s : %d] histo_2[%d] => ", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $i);
+				
+				
+				echo "<br>"; echo "<br>";
+				
+				print_r($h);
+
+				echo "<br>"; echo "<br>";
+				
+			}
+			
+// 			print_r(array_slice($histo_2, 0,10));
 // 			print_r(array_slice($histo, 0,3));
 				
 			echo "<br>"; echo "<br>";
