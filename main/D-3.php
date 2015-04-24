@@ -139,7 +139,7 @@
 		
 // 		echo "<br>"; echo "<br>";
 		
-		$tpl_name_edited .= "???";
+// 		$tpl_name_edited .= "???";
 		
 		$smarty->assign('tpl_name', $tpl_name_edited);		//=> w
 		
@@ -454,6 +454,11 @@
 		
 	}//do_Job_D_3_V_1_0
 
+	/*******************************
+	 * <br>
+	assign<br>
+		1. histo
+	*******************************/
 	function 
 	do_Job_D_3_V_1_0_2_Process($smarty) {
 
@@ -482,6 +487,12 @@
 		$histo = Utils::get_Histogram($tokens);
 		
 		/*******************************
+			assing
+		*******************************/
+		$smarty->assign("histo", array_slice($histo, 0, 10));
+// 		$smarty->assign("histo", $histo);
+		
+		/*******************************
 			end
 		*******************************/
 		$end = time();
@@ -492,7 +503,7 @@
 		
 		echo "<br>"; echo "<br>";
 		
-	}
+	}//do_Job_D_3_V_1_0_2_Process($smarty)
 	
 	function 
 	do_Job_D_3_V_1_0_2() {
@@ -555,11 +566,50 @@
 		
 	}//do_Job_D_3_V_1_0_2
 
+	function 
+	do_Job_D_3_V_1_1_0() {
+
+		/*******************************
+			setup: smarty
+		*******************************/
+		$smarty = new SmartyBC();
+// 		$smarty = new Smarty();
+		
+		smarty_Setup($smarty);
+		
+		//debug
+		printf("[%s : %d] %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+				// 				Utils::get_Dirname(__FILE__, "Smarty"),
+				__LINE__, Utils::get_CurrentTime());
+		
+		echo "<br>"; echo "<br>";
+
+		/*******************************
+			tokens: of a category
+		*******************************/
+		do_Job_D_3_V_1_0_2_Process($smarty);
+		
+		/*******************************
+		 tpl name
+		*******************************/
+		$tpl_name = get_Tpl_Name();
+		
+		/*******************************
+		view
+		*******************************/
+		$tpl_name = "D-3/index/index_table.tpl";	// w
+
+		execute_View($smarty, $tpl_name);
+		
+	}//do_Job_D_3_V_1_0_2
+
 ?>
 
 <?php
 
 	require('../libs/Smarty.class.php');	//=> works
+	require('../libs/SmartyBC.class.php');	//=> 
 // 	require('libs/Smarty.class.php');	//=> works
 
 // 	require '../utils/utils.php';
@@ -567,5 +617,6 @@
 	require 'utils/utils.php';
 	require 'utils/DB.php';
 	
-	do_Job_D_3_V_1_0_2();
+	do_Job_D_3_V_1_1_0();
+// 	do_Job_D_3_V_1_0_2();
 // 	do_Job_D_3_V_1_0();

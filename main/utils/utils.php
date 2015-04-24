@@ -1931,13 +1931,13 @@
 				
 			echo "<br>"; echo "<br>";
 
-			printf("[%s : %d] nouns_2 => ", 
-							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+// 			printf("[%s : %d] nouns_2 => ", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 			
 			
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 			
-			var_dump(array_slice($nouns_2, 0, 3));
+// 			var_dump(array_slice($nouns_2, 0, 3));
 			
 			
 			/*******************************
@@ -2041,6 +2041,9 @@
 			/////////////////////////////////
 			//test
 			/////////////////////////////////
+			/*******************************
+				init: skimmed list
+			*******************************/
 			for ($i = 0; $i < count($nouns_skimmed_2); $i++) {
 				
 				$s = $nouns_skimmed_2[$i];
@@ -2112,15 +2115,15 @@
 			
 			echo "<br>"; echo "<br>";
 			
-			printf("[%s : %d] array_slice(\$histo_2, 0,3)", 
-							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+// 			printf("[%s : %d] array_slice(\$histo_2, 0,3)", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 			
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 			
-			print_r(array_slice($histo_2, 0,3));
-// 			print_r($histo[$nouns_skimmed_2[0]->get_form()]);
+// 			print_r(array_slice($histo_2, 0,3));
+// // 			print_r($histo[$nouns_skimmed_2[0]->get_form()]);
 			
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 			
 			
 			/*******************************
@@ -2156,32 +2159,33 @@
 
 			$keys = array_keys($histo_2);
 			
-			for ($i = 0; $i < 10; $i++) {
+// 			for ($i = 0; $i < 10; $i++) {
 				
-				$h = $histo_2[$keys[$i]];
-// 				$h = $histo_2[$i];
+// 				$h = $histo_2[$keys[$i]];
+// // 				$h = $histo_2[$i];
 				
-				printf("[%s : %d] histo_2[%d] => ", 
-								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $i);
+// 				printf("[%s : %d] histo_2[%d] => ", 
+// 								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $i);
 				
 				
-				echo "<br>"; echo "<br>";
+// 				echo "<br>"; echo "<br>";
 				
-				print_r($h);
+// 				print_r($h);
 
-				echo "<br>"; echo "<br>";
+// 				echo "<br>"; echo "<br>";
 				
-			}
+// 			}
 			
-// 			print_r(array_slice($histo_2, 0,10));
-// 			print_r(array_slice($histo, 0,3));
+// // 			print_r(array_slice($histo_2, 0,10));
+// // 			print_r(array_slice($histo, 0,3));
 				
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 			
 			/*******************************
 				return
 			*******************************/
-			return null;
+			return $histo_2;
+// 			return null;
 			
 		}//get_Histogram
 		
