@@ -26,40 +26,71 @@
 	  		<table>
 	  			{php}
 	  				
-	  				{* global $index = 1; *}
+	  				global $index;	{* works *}
 	  				
-	  				$this->assign('index' 1);
+	  				$index = 1;
+	  				
+	  				{* {$smarty}->assign("index", $index); *}
+	  				//$smarty->assign("index", $index);
+	  				
+	  				//$this->assign("index", $index);
+	  				
+	  				global $foo, $bar;
+					   if($foo == $bar){
+					     echo 'This will be sent to browser';
+					   }
+					   
+					//$this->assign('varX','Toffee');
 	  				
 	  			{/php}
 	  			
-				{foreach $histo as $h}
-				{strip}
-				   <tr bgcolor="{cycle values="#aaaaaa,#bbbbbb"}">
-				      <td>
-				      
-				      	{php}
-				      	
-				      		echo $index;
-				      		
-				      		{* $index ++; *}
-				      	
-				      	{/php}
-				      
-				      </td>
-				      
-				      <td>{$h.form}</td>
-				      <td>{$h.form}</td>
-				      <td>{$h.hin}</td>
-				      <td>{$h.hin_1}</td>
-				      <td>{$h.hin_2}</td>
-				      <td>{$h.hin_3}</td>
-				      <td>{$h.histo}</td>
-				   </tr>
-				{/strip}
-				{/foreach}
+	  			<tr>
+	  			
+	  				<td>
+	  					{php}
+	  					
+	  						echo "hi";
+	  						
+	  						echo " ";
+	  						
+	  						//echo $index;
+	  						
+	  						//echo $title;	{* Undefined variable: title *}
+	  					
+	  					{/php}
+	  					{$index}
+	  				</td>
+	  			</tr>
 		  	
 			</table>  
 		  
+		  {assign var="y" value=0}
+		  
+		  {$y}
+
+		  
+			{* {counter start=1 skip=1} *}
+			{* {section name=cnt loop=$xxxxxx} *}
+			  {* index:{$smarty.section.cnt.index} *}
+			{* {$smarty.section.cnt.iteration} *}
+			
+			{* {if !$smarty.section.cnt.first} *}
+			{*     counter:{counter} *}
+			{*   {/if} *}
+			{*   {if !$smarty.section.cnt.last} *}
+			{*     counter:{counter} *}
+			{*   {/if} *}
+			{* {/section} *}		  
+		  
+		  {* {section name=sec start=0 loop=5} *}
+		  
+		  	{* => Cannot use object of type SmartyBC as array *}
+		  
+		  {* {/section} *}
+		  
+		  {php}
+		  
+		  {/php}
 	
 	  <hr>
 	  

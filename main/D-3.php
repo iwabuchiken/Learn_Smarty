@@ -588,7 +588,16 @@
 		/*******************************
 			tokens: of a category
 		*******************************/
-		do_Job_D_3_V_1_0_2_Process($smarty);
+// 		do_Job_D_3_V_1_0_2_Process($smarty);
+		
+		//test
+		$smarty->assign("smarty", $smarty);
+		
+		$index = 1;
+		
+		$smarty->assign("index", $index);
+		
+// 		$index = array();
 		
 		/*******************************
 		 tpl name
@@ -608,6 +617,8 @@
 
 <?php
 
+// 	require('../libs_3.1.19/Smarty.class.php');	//=> 
+// 	require('../libs_3.1.19/SmartyBC.class.php');	//=> 
 	require('../libs/Smarty.class.php');	//=> works
 	require('../libs/SmartyBC.class.php');	//=> 
 // 	require('libs/Smarty.class.php');	//=> works
