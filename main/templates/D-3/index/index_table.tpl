@@ -22,76 +22,48 @@
   <body>
   
 	  <hr>
-
-	  		<table>
-	  			{php}
-	  				
-	  				global $index;	{* works *}
-	  				
-	  				$index = 1;
-	  				
-	  				{* {$smarty}->assign("index", $index); *}
-	  				//$smarty->assign("index", $index);
-	  				
-	  				//$this->assign("index", $index);
-	  				
-	  				global $foo, $bar;
-					   if($foo == $bar){
-					     echo 'This will be sent to browser';
-					   }
-					   
-					//$this->assign('varX','Toffee');
-	  				
-	  			{/php}
+	  
+	  	{counter start=0 skip=1 print=FALSE}
+	  	
+	  	<table>
+	  	
+	  		<!-- header -->
+  			<tr>
+  			
+	  		{foreach $header as $hd}
 	  			
-	  			<tr>
+	  			<td>
 	  			
-	  				<td>
-	  					{php}
-	  					
-	  						echo "hi";
-	  						
-	  						echo " ";
-	  						
-	  						//echo $index;
-	  						
-	  						//echo $title;	{* Undefined variable: title *}
-	  					
-	  					{/php}
-	  					{$index}
-	  				</td>
-	  			</tr>
-		  	
-			</table>  
-		  
-		  {assign var="y" value=0}
-		  
-		  {$y}
-
-		  
-			{* {counter start=1 skip=1} *}
-			{* {section name=cnt loop=$xxxxxx} *}
-			  {* index:{$smarty.section.cnt.index} *}
-			{* {$smarty.section.cnt.iteration} *}
-			
-			{* {if !$smarty.section.cnt.first} *}
-			{*     counter:{counter} *}
-			{*   {/if} *}
-			{*   {if !$smarty.section.cnt.last} *}
-			{*     counter:{counter} *}
-			{*   {/if} *}
-			{* {/section} *}		  
-		  
-		  {* {section name=sec start=0 loop=5} *}
-		  
-		  	{* => Cannot use object of type SmartyBC as array *}
-		  
-		  {* {/section} *}
-		  
-		  {php}
-		  
-		  {/php}
-	
+	  				{$hd}
+	  			
+	  			</td>
+	  		
+	  		{/foreach}
+	  	
+  			{foreach $histo as $h}
+  			</tr>
+  			
+			{strip}
+			   <tr bgcolor="{cycle values="#aaaaaa,#bbbbbb"}">
+			      <td>
+			      
+			      	{counter}	
+			      		{* $index ++; *}
+			      
+			      </td>
+			      
+			      <td>{$h.form}</td>
+			      <td>{$h.form}</td>
+			      <td>{$h.hin}</td>
+			      <td>{$h.hin_1}</td>
+			      <td>{$h.hin_2}</td>
+			      <td>{$h.hin_3}</td>
+			      <td>{$h.histo}</td>
+			   </tr>
+			{/strip}
+			{/foreach}
+	  	</table>
+	  	
 	  <hr>
 	  
 	  <div class="blue">yes</div>

@@ -489,8 +489,19 @@
 		/*******************************
 			assing
 		*******************************/
-		$smarty->assign("histo", array_slice($histo, 0, 10));
+		$smarty->assign("histo", array_slice($histo, 0, 20));
+// 		$smarty->assign("histo", array_slice($histo, 0, 10));
 // 		$smarty->assign("histo", $histo);
+		
+		var_dump(array_slice($histo, 0, 1));
+// 		var_dump($histo[0]);
+		
+		/*******************************
+			assign: header
+		*******************************/
+		$header = explode(",", "a,b,c,d,e,f,g,h");
+		
+		$smarty->assign("header", $header);
 		
 		/*******************************
 			end
@@ -588,7 +599,14 @@
 		/*******************************
 			tokens: of a category
 		*******************************/
-// 		do_Job_D_3_V_1_0_2_Process($smarty);
+		do_Job_D_3_V_1_0_2_Process($smarty);
+
+		//test
+		//REF http://www.smarty.net/docsv2/en/language.function.section
+		$data = array(1000,1001,1002);
+		$smarty->assign('custid',$data);
+		
+		$count = array(1,2,3);
 		
 		//test
 		$smarty->assign("smarty", $smarty);
