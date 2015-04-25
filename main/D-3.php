@@ -517,6 +517,160 @@
 	}//do_Job_D_3_V_1_0_2_Process($smarty)
 	
 	function 
+	do_Job_D_3_V_1_2_0_Process($smarty) {
+
+		/*******************************
+		 start
+		*******************************/
+		$start = time();
+		
+		$cat_id = 15;
+		
+		printf("[%s : %d] cat_id => %d",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $cat_id);
+		
+		echo "<br>"; echo "<br>";
+		
+		/*******************************
+		 get: tokens
+		*******************************/
+		$tokens = DB::findAll_Tokens_from_CatID($smarty, $cat_id);
+		
+		printf("[%s : %d] tokens => %d",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
+		
+		echo "<br>"; echo "<br>";
+		
+		$histo = Utils::get_Histogram($tokens);
+		
+		/*******************************
+		 assing
+		*******************************/
+		$smarty->assign("histo", array_slice($histo, 0, 20));
+		// 		$smarty->assign("histo", array_slice($histo, 0, 10));
+		// 		$smarty->assign("histo", $histo);
+		
+// 		var_dump(array_slice($histo, 0, 1));
+		// 		var_dump($histo[0]);
+		
+		/*******************************
+		 assign: header
+		*******************************/
+// 		$header = explode(",", "id,a,b,c,d,e,f,g,h");
+// 		$header = explode(",", "a,b,c,d,e,f,g,h");
+		
+// 		$header = DB::get_Header($smarty, DB::$tname_Tokens);
+
+		$header = array(
+					
+						"SN",
+						"db ids",
+				"form",
+				"hin",
+				"hin_1",
+				"hin_2",
+				"hin_3",
+				"histo",
+		);
+		
+		$smarty->assign("header", $header);
+		
+		/*******************************
+		 end
+		*******************************/
+		$end = time();
+		
+		printf("[%s : %d] <span class=\"green\">time => %s</span>",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+		__LINE__, date('H:i:s', $end - $start - (9*60*60)));
+		
+		echo "<br>"; echo "<br>";
+		
+// 		/*******************************
+// 			start
+// 		*******************************/
+// 		$start = time();
+
+// 		/*******************************
+// 			process
+// 		*******************************/
+// 		$tname = "tokens";
+
+// 		/*******************************
+// 		 get: db
+// 		*******************************/
+// 		$dbType = DB::get_DB_Type();
+			
+// 		$db = DB::get_DB($dbType);
+		
+// 		$result = $db->query("select * from $tname limit 1");
+// // 		$result = $db->query('select * from table limit 1');
+// 		$fields = array_keys($result->fetch(PDO::FETCH_ASSOC));
+		
+// 		printf("[%s : %d] result => ", 
+// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+		
+// 		echo "<br>"; echo "<br>";
+		
+// 		$num = count($fields);
+		
+// 		for ($i = 0; $i < $num; $i++) {
+			
+// 			printf("[%s : %d] column => %s", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fields[$i]);
+			
+// 			echo "<br>"; echo "<br>";
+			
+// 		}
+		
+// 		echo "<br>"; echo "<br>";
+		
+// 		var_dump(array_keys($fields));
+		
+// // 		var_dump($fields);
+		
+// // 		$rs = $db->query("SELECT * FROM $tname LIMIT 0");
+// // 		for ($i = 0; $i < $rs->columnCount(); $i++) {
+// // 			$col = $rs->getColumnMeta($i);
+// // 			$columns[] = $col['name'];
+			
+// // 			printf("[%s : %d] colulmn => %s", 
+// // 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $col['name']);
+			
+// // 			echo "<br>"; echo "<br>";
+			
+			
+			
+// // 		}
+// // 		print_r($columns);
+		
+// // 		$q = $db->prepare("DESCRIBE $tname");
+// // // 		$q = $dbh->prepare("DESCRIBE $tokens");
+		
+// // 		$q->execute();
+		
+// // 		$table_fields = $q->fetchAll(PDO::FETCH_COLUMN);
+
+// 		/*******************************
+// 			close: db
+// 		*******************************/
+// 		$db = null;
+		
+// 		/*******************************
+// 			end
+// 		*******************************/
+// 		$end = time();
+		
+// 		printf("[%s : %d] <span class=\"green\">time => %s</span>",
+// 		Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+// 		__LINE__, date('H:i:s', $end - $start - (9*60*60)));
+		
+// 		echo "<br>"; echo "<br>";
+		
+	}//do_Job_D_3_V_1_2_0_Process
+	
+	
+	function 
 	do_Job_D_3_V_1_0_2() {
 
 		/*******************************
@@ -631,6 +785,61 @@
 		
 	}//do_Job_D_3_V_1_0_2
 
+	function 
+	do_Job_D_3_V_1_2_0() {
+
+		/*******************************
+			setup: smarty
+		*******************************/
+		$smarty = new SmartyBC();
+// 		$smarty = new Smarty();
+		
+		smarty_Setup($smarty);
+		
+		//debug
+		printf("[%s : %d] %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+				// 				Utils::get_Dirname(__FILE__, "Smarty"),
+				__LINE__, Utils::get_CurrentTime());
+		
+		echo "<br>"; echo "<br>";
+
+		/*******************************
+			tokens: of a category
+		*******************************/
+		do_Job_D_3_V_1_2_0_Process($smarty);
+
+		//test
+		//REF http://www.smarty.net/docsv2/en/language.function.section
+		$data = array(1000,1001,1002);
+		$smarty->assign('custid',$data);
+		
+		$count = array(1,2,3);
+		
+		//test
+		$smarty->assign("smarty", $smarty);
+		
+		$index = 1;
+		
+		$smarty->assign("index", $index);
+		
+// 		$index = array();
+		
+		/*******************************
+		 tpl name
+		*******************************/
+		$tpl_name = get_Tpl_Name();
+		
+		/*******************************
+		view
+		*******************************/
+// 		$tpl_name = "D-3/index/D_3_V_1_2_0.tpl";	// 
+		$tpl_name = "D-3/index/index_table.tpl";	// w
+
+		execute_View($smarty, $tpl_name);
+		
+	}//do_Job_D_3_V_1_2_0
+
 ?>
 
 <?php
@@ -646,6 +855,7 @@
 	require 'utils/utils.php';
 	require 'utils/DB.php';
 	
-	do_Job_D_3_V_1_1_0();
+	do_Job_D_3_V_1_2_0();
+// 	do_Job_D_3_V_1_1_0();
 // 	do_Job_D_3_V_1_0_2();
 // 	do_Job_D_3_V_1_0();

@@ -14,6 +14,13 @@
 		
 		private $yomi;
 		
+		private $db_id;
+		
+		function get_db_id() {
+
+			return $this->db_id;
+			
+		}
 		
 		function get_histo() {
 
@@ -58,6 +65,15 @@
 		/*******************************
 			setter
 		*******************************/
+		function set_db_id($db_id) {
+			
+			
+			$this->db_id		= $db_id;
+
+			return $this;
+
+		}
+		
 		function set_histo($histo) {
 			
 			

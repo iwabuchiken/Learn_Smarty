@@ -52,7 +52,7 @@
 			      
 			      </td>
 			      
-			      <td>{$h.form}</td>
+			      <td>{$h.db_id}</td>
 			      <td>{$h.form}</td>
 			      <td>{$h.hin}</td>
 			      <td>{$h.hin_1}</td>

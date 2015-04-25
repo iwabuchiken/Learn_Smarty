@@ -355,53 +355,6 @@
 
 			}
 		
-// 			if ($dbType == DB::$dbType_MySQL) {
-			
-// 				$rows = array();
-				
-// 				$sql = "SELECT * FROM tokens WHERE history_id = 1545;";
-// // 				$sql = "SELECT * FROM tokens WHERE id < 10;";
-				
-// 				$res = $db->query($sql);
-				
-// 				while($row = $res->fetch()){
-// 					// 					while($row=$alltables->fetch()){
-						
-// // 					var_dump(array_values($row));
-// // 					var_dump(array_keys($row));
-// // 					var_dump($row);
-					
-// // 					echo "<br>";
-					
-					
-					
-// // 					echo $row[0].",".$row[1].",".$row[2].","
-// // // 							.mb_convert_encoding($row[3], "UTF-8")
-// // 							.$row[3]
-// // 							.'<br/>';
-				
-// 					array_push($rows, $row);
-					
-// 				}
-
-// 				printf("[%s : %d] rows => %d", __FILE__, __LINE__, count($rows));
-				
-// 				echo "<br>";
-// 				echo "<br>";
-				
-				
-			
-// 			} else {
-			
-// 				printf("[%s : %d] sqlite. no op", __FILE__, __LINE__);
-				
-// 				echo "<br>";
-// 				echo "<br>";
-				
-				
-				
-// 			}//if ($dbType == DB::$dbType_MySQL)
-			
 			/*******************************
 				db: close
 			*******************************/
@@ -877,5 +830,72 @@
 			echo "<br>"; echo "<br>";
 			
 		}//drop_Table
+
+		public static function
+		get_Header($smarty, $tname) {
+			
+			/*******************************
+			 get: db
+			*******************************/
+			$dbType = DB::get_DB_Type();
+				
+			$db = DB::get_DB($dbType);
+			
+			/*******************************
+			 validate
+			*******************************/
+			if ($db == null) {
+			
+				printf("[%s : %d] db => null: type=%s", __FILE__, __LINE__, $dbType);
+			
+				echo "<br>";
+				echo "<br>";
+			
+				return null;
+			
+			}
+			
+			/*******************************
+				query
+			*******************************/
+			$result = $db->query("select * from $tname limit 1");
+			
+			$fields = array_keys($result->fetch(PDO::FETCH_ASSOC));
+			
+			/*******************************
+				validate
+			*******************************/
+			if ($fields == null || count($fields) < 1) {
+				
+				printf("[%s : %d] query => null returned", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+				echo "<br>"; echo "<br>";
+				
+				return NULL;
+				
+			} else if (count($fields) < 1) {
+				
+				printf("[%s : %d] query => 0 result", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+				echo "<br>"; echo "<br>";
+				
+				return NULL;
+				
+			}
+			
+			/*******************************
+				close
+			*******************************/
+			$db = null;
+			
+			/*******************************
+				return
+			*******************************/
+			return $fields;
+			
+		}//get_Header($smarty, $tname)
+		
 		
 	}//class DB
