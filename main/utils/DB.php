@@ -23,6 +23,8 @@
 		*******************************/
 		public static $tname_Tokens = "tokens";
 		
+		public static $tname_Categories = "categories";
+		
 		
 		//********************************************
 // 		Functions
@@ -661,7 +663,8 @@
 				query
 			*******************************/
 			//REF http://stackoverflow.com/questions/1717495/check-if-a-database-table-exists-using-php-pdo answered Jan 16 '13 at 9:50
-			$sql = "SELECT 1 FROM ".DB::$tname_Tokens." LIMIT 1";
+			$sql = "SELECT 1 FROM ".$tname." LIMIT 1";
+// 			$sql = "SELECT 1 FROM ".DB::$tname_Tokens." LIMIT 1";
 			
 			try {
 				
@@ -703,41 +706,17 @@
 
 				return $res;
 				
+			} else if ($tname == DB::$tname_Categories) {
+			
+				$res = DB::create_Table__Categories($db, $tname);
+
+				return $res;
+				
 			} else {
 			
 				
 				
 			}//if ($tname == DB::$tname_Tokens)
-			
-			
-			
-// 			$sql = "CREATE TABLE IF NOT EXISTS "
-// 					.DB::$tname_Tokens
-// 					." "
-// 					."("
-// 						."id INTEGER PRIMARY KEY, "
-// 						."created_at VARCHAR(30), "
-// 						."updated_at VARCHAR(30), "
-// 						."form VARCHAR(30), "
-// 						."hin VARCHAR(30) "
-// 					.")"
-// 			;
-
-// 			$res = $db->exec($sql);
-			
-// 			printf("[%s : %d] create table %s:  result => %d", 
-// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, 
-// 							$tname,
-// 							$res);
-			
-// 			echo "<br>"; echo "<br>";
-			
-			
-// 			// 				$db->exec("CREATE TABLE IF NOT EXISTS"
-// 			// 						." Dogs "
-// 			// 						."(Id INTEGER PRIMARY KEY, Breed TEXT, Name TEXT, Age INTEGER)");
-
-// 			return $res;
 			
 		}//create_Table($db, $tname)		
 		
@@ -801,6 +780,42 @@
 			return $res;
 			
 		}//create_Table__Tokens		
+		
+		public static function
+		create_Table__Categories($db, $tname) {
+			
+			$sql = "CREATE TABLE IF NOT EXISTS "
+					.DB::$tname_Categories
+					." "
+					."("
+						."id INTEGER PRIMARY KEY, "
+						."created_at VARCHAR(30), "
+						."updated_at VARCHAR(30), "
+								
+						."name VARCHAR(100)"
+						.", "
+								
+						."genre_id INT(11)"
+						.", "
+						."original_id INT(11)"
+					.")"
+			;
+
+			$res = $db->exec($sql);
+			
+			printf("[%s : %d] exec result => %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
+			
+			echo "<br>"; echo "<br>";
+			
+			
+			// 				$db->exec("CREATE TABLE IF NOT EXISTS"
+			// 						." Dogs "
+			// 						."(Id INTEGER PRIMARY KEY, Breed TEXT, Name TEXT, Age INTEGER)");
+
+			return $res;
+			
+		}//create_Table__Categories		
 		
 		public static function
 		drop_Table($db, $tname) {

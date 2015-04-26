@@ -105,24 +105,9 @@
 	function 
 	execute_View($smarty, $tpl_name) {
 
-// 		printf("[%s : %d] tpl_name => %s", 
-// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tpl_name);
-		
-		
-// 		echo "<br>"; echo "<br>";
-		
 		$p = "/([^\/]+)(?=\.tpl$)/i";
 		
 		preg_match($p, $tpl_name, $matches);
-		
-// 		var_dump($matches);
-		
-// 		echo "<br>"; echo "<br>";
-		
-// 		printf("[%s : %d] matches => %d", 
-// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($matches));
-		
-// 		echo "<br>"; echo "<br>";
 		
 		if (count($matches) > 0) {
 			
@@ -134,13 +119,6 @@
 			
 		}
 
-// 		printf("[%s : %d] \$tpl_name_edited => %s", 
-// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tpl_name_edited);
-		
-// 		echo "<br>"; echo "<br>";
-		
-// 		$tpl_name_edited .= "???";
-		
 		$smarty->assign('tpl_name', $tpl_name_edited);		//=> w
 		
 		$smarty->assign('title', $tpl_name_edited);
@@ -167,20 +145,14 @@
 // 		$smarty->assign('path_css', "/Smarty/main/libs/templates/rsc/css/main.css");
 		
 		
-		/*******************************
-			disp
-		*******************************/
-// 		printf("[%s : %d] \$tpl_name => %s", 
-// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tpl_name);
-		
-// 		echo "<br>"; echo "<br>";
 		
 		$smarty->display("templates/$tpl_name");	//=> w
 // 		$smarty->display("../templates/$tpl_name");	//=> w
 		
 		echo "<hr>";
 		echo "<br>";
-		echo "done (".__FILE__.")";
+		echo "done (".Utils::get_Dirname(__FILE__, CONS::$proj_Name).")";
+// 		echo "done (".__FILE__.")";
 		
 	}//execute_View($smarty, $tpl_name)
 
@@ -561,6 +533,8 @@
 		
 // 		$header = DB::get_Header($smarty, DB::$tname_Tokens);
 
+		//REF array_unshift http://stackoverflow.com/questions/8340451/array-push-as-the-first-index-php answered Dec 1 '11 at 11:19
+		
 		$header = array(
 					
 						"SN",
@@ -669,7 +643,9 @@
 		
 	}//do_Job_D_3_V_1_2_0_Process
 	
-	
+	/*******************************
+		functions: main
+	*******************************/
 	function 
 	do_Job_D_3_V_1_0_2() {
 
@@ -840,6 +816,143 @@
 		
 	}//do_Job_D_3_V_1_2_0
 
+	function 
+	createTable_Categorys($smarty) {
+
+		/*******************************
+		 get: db
+		*******************************/
+		$dbType = DB::get_DB_Type();
+		
+		$db = DB::get_DB($dbType);
+		
+		/*******************************
+		 validate: table exists
+		*******************************/
+		$tname = DB::$tname_Categories;
+			
+		$res = DB::table_Exists($db, $tname);
+		
+// 		printf("[%s : %d] table %s: exists => %d",
+// 					Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__,
+// 					$tname,
+// 					$res);
+			
+// 		echo "<br>"; echo "<br>";
+			
+// 		return ;
+		
+		/*******************************
+		 create: table
+		*******************************/
+		if ($res === false) {
+		
+			$res = DB::create_Table($db, $tname);
+		
+			if ($res != 0) {
+					
+				printf("[%s : %d] can't create table: %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+					
+				echo "<br>"; echo "<br>";
+				
+				return -1;
+					
+			} else {
+					
+				printf("[%s : %d] table created: %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+
+				echo "<br>"; echo "<br>";
+				
+			}
+		
+		} else {
+		
+			printf("[%s : %d] table exists => %s",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+		
+			echo "<br>"; echo "<br>";
+		
+		}
+
+		/*******************************
+			return
+		*******************************/
+		return ;
+		
+	}//do_Job_D_3_V_1_2_2_Process_CreateTable_Categorys
+
+	function 
+	do_Job_D_3_V_1_2_2_CreateTable_Categorys() {
+
+		/*******************************
+			dispatch
+		*******************************/
+		@$server_Name = $_SERVER['SERVER_NAME'];
+
+		if ($server_Name == null) {
+
+			printf("[%s : %d] servr name => null",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+
+			echo "<br>"; echo "<br>";
+
+			do_Job_D_3_V_1_2_0();
+
+			return ;
+
+		} else if ($server_Name != CONS::$server_Local) {
+
+			printf("[%s : %d] server is => $server_Name",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+
+			echo "<br>"; echo "<br>";
+			
+			do_Job_D_3_V_1_2_0();
+			
+			return ;
+
+		}
+
+		/*******************************
+			setup: smarty
+		*******************************/
+		$smarty = new SmartyBC();
+		
+		smarty_Setup($smarty);
+		
+		//debug
+		printf("[%s : %d] %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+				// 				Utils::get_Dirname(__FILE__, "Smarty"),
+				__LINE__, Utils::get_CurrentTime());
+		
+		echo "<br>"; echo "<br>";
+
+		/*******************************
+			tokens: of a category
+		*******************************/
+		createTable_Categorys($smarty);
+
+		/*******************************
+		 tpl name
+		*******************************/
+		$tpl_name = get_Tpl_Name();
+		
+		/*******************************
+		view
+		*******************************/
+// 		$tpl_name = "D-3/index/D_3_V_1_2_0.tpl";	// 
+// 		$tpl_name = "D-3/index/index_table.tpl";	// w
+		$tpl_name = "plain.tpl";	// 
+
+		$smarty->assign("message", "ok");
+		
+		execute_View($smarty, $tpl_name);
+		
+	}//do_Job_D_3_V_1_2_2_CreateTable_Categorys
+
 ?>
 
 <?php
@@ -854,8 +967,9 @@
 // 	require '../utils/DB.php';
 	require 'utils/utils.php';
 	require 'utils/DB.php';
-	
-	do_Job_D_3_V_1_2_0();
+
+	do_Job_D_3_V_1_2_2_CreateTable_Categorys();
+// 	do_Job_D_3_V_1_2_0();
 // 	do_Job_D_3_V_1_1_0();
 // 	do_Job_D_3_V_1_0_2();
 // 	do_Job_D_3_V_1_0();
