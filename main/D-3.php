@@ -1023,6 +1023,77 @@
 		
 	}//do_Job_D_3_V_1_2_3_InsertData_Categorys
 
+	function 
+	do_Job_D_3_V_1_2_4_Get_2_Categories() {
+
+		/*******************************
+			dispatch
+		*******************************/
+		@$server_Name = $_SERVER['SERVER_NAME'];
+
+		if ($server_Name == null) {
+
+			printf("[%s : %d] servr name => null",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+
+			echo "<br>"; echo "<br>";
+
+			do_Job_D_3_V_1_2_0();
+
+			return ;
+
+		} else if ($server_Name != CONS::$server_Local) {
+
+			printf("[%s : %d] server is => $server_Name",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+
+			echo "<br>"; echo "<br>";
+			
+			do_Job_D_3_V_1_2_0();
+			
+			return ;
+
+		}
+
+		/*******************************
+			setup: smarty
+		*******************************/
+		$smarty = new SmartyBC();
+		
+		smarty_Setup($smarty);
+		
+		//debug
+		printf("[%s : %d] %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+				// 				Utils::get_Dirname(__FILE__, "Smarty"),
+				__LINE__, Utils::get_CurrentTime());
+		
+		echo "<br>"; echo "<br>";
+
+		/*******************************
+			insert data
+		*******************************/
+// 		Utils::save_Categories_from_CSV($smarty);
+
+		/*******************************
+		 tpl name
+		*******************************/
+		$tpl_name = get_Tpl_Name();
+		
+		/*******************************
+		view
+		*******************************/
+		$tpl_name = "D-3/index/D_3_V_1_2_4.tpl";	// 
+// 		$tpl_name = "D-3/index/index_table.tpl";	// w
+// 		$tpl_name = "plain.tpl";	// 
+// 		$tpl_name = "plain.tpl";	// 
+
+		$smarty->assign("message", "ok");
+		
+		execute_View($smarty, $tpl_name);
+		
+	}//do_Job_D_3_V_1_2_4_Get_2_Categories
+
 ?>
 
 <?php
@@ -1038,7 +1109,8 @@
 	require 'utils/utils.php';
 	require 'utils/DB.php';
 
-	do_Job_D_3_V_1_2_3_InsertData_Categorys();
+	do_Job_D_3_V_1_2_4_Get_2_Categories();
+// 	do_Job_D_3_V_1_2_3_InsertData_Categorys();
 // 	do_Job_D_3_V_1_2_2_CreateTable_Categorys();
 // 	do_Job_D_3_V_1_2_0();
 // 	do_Job_D_3_V_1_1_0();
