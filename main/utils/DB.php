@@ -377,6 +377,126 @@
 
 		/*******************************
 			@return
+			Array of fetched rows<br>
+			null	=> can't get db<br>
+					=> query returned 0<br>
+					=> row-to-category conversion returned null<br>
+		*******************************/
+		public static function
+		find_Category_from_ID($smarty, $cat_id) {
+			
+			/*******************************
+				get: db
+			*******************************/
+			$dbType = DB::get_DB_Type();
+			
+			$db = DB::get_DB($dbType);
+
+			/*******************************
+				validate
+			*******************************/
+			if ($db == null) {
+				
+				printf("[%s : %d] db => null: type=%s", __FILE__, __LINE__, $dbType);
+				
+				echo "<br>";
+				echo "<br>";
+				
+				return null;
+				
+			}
+
+			/*******************************
+				setup
+			*******************************/
+			$tname = DB::$tname_Categories;
+			
+			/*******************************
+				get: tokens
+			*******************************/
+			$rows = array();
+			
+			$sql = "SELECT * FROM $tname WHERE original_id = $cat_id LIMIT 1;";
+// 			$sql = "SELECT * FROM $tname WHERE category_id = $cat_id LIMIT 1;";
+
+			$res = $db->query($sql);
+
+			/*******************************
+				validate
+			*******************************/
+// 			printf("[%s : %d] class is => ", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+// 			var_dump(get_class($res));
+			
+			if (get_class($res) != "PDOStatement" && $res == 0) {
+				
+				printf("[%s : %d] SQL returned 0 for category id: $cat_id", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+				$db = null;
+				
+				return null;
+				
+			}
+			
+// 			//debug
+// 			printf("[%s : %d] res => %s(%d)", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+// 							__LINE__, 
+// 							$res,
+// 							$res
+// 			);
+			
+
+// 			return null;
+			
+			/*******************************
+				fetch
+			*******************************/
+			while($row = $res->fetch()){
+
+				array_push($rows, $row);
+
+			}
+
+// 			printf("[%s : %d] rows => ", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+			
+			
+// 			var_dump($rows[0]);
+// // 			var_dump($rows);
+
+// 			echo "<br>"; echo "<br>";
+			
+			
+			
+			/*******************************
+				db: close
+			*******************************/
+			$db = null;
+
+			/*******************************
+				conversion
+			*******************************/
+			return Utils::conv_DB_2_Category($smarty, $rows[0]);
+			
+			
+// 			/*******************************
+// 				conv: rows to tokens
+// 			*******************************/
+// 			$tokens = Utils::conv_Rows_2_Tokens($smarty, $rows);
+			
+// 			/*******************************
+// 				return
+// 			*******************************/
+// 			return $tokens;
+// // 			return $rows;
+			
+		}//findAll_Tokens_from_CatID
+
+		/*******************************
+			@return
 			 > 0 => number of data inserted
 			-1 => can't create table
 			-2	=> get_DB --> null returned
