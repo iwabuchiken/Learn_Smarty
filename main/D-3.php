@@ -155,6 +155,82 @@
 // 		echo "done (".__FILE__.")";
 		
 	}//execute_View($smarty, $tpl_name)
+
+	function
+	createTable_Genres($smarty) {
+
+		$res = Utils::createTable($smarty, DB::$tname_Genres);
+		
+		printf("[%s : %d] result => %d", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
+		
+		
+		echo "<br>"; echo "<br>";
+		
+// 		/*******************************
+// 		 get: db
+// 		*******************************/
+// 		$dbType = DB::get_DB_Type();
+	
+// 		$db = DB::get_DB($dbType);
+	
+// 		/*******************************
+// 		 validate: table exists
+// 		*******************************/
+// 		$tname = DB::$tname_Categories;
+			
+// 		$res = DB::table_Exists($db, $tname);
+	
+// 		// 		printf("[%s : %d] table %s: exists => %d",
+// 		// 					Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__,
+// 		// 					$tname,
+// 		// 					$res);
+			
+// 		// 		echo "<br>"; echo "<br>";
+			
+// 		// 		return ;
+	
+// 		/*******************************
+// 		 create: table
+// 		*******************************/
+// 		if ($res === false) {
+	
+// 			$res = DB::create_Table($db, $tname);
+	
+// 			if ($res != 0) {
+					
+// 				printf("[%s : %d] can't create table: %s",
+// 				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+					
+// 				echo "<br>"; echo "<br>";
+	
+// 				return -1;
+					
+// 			} else {
+					
+// 				printf("[%s : %d] table created: %s",
+// 				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+	
+// 				echo "<br>"; echo "<br>";
+	
+// 			}
+	
+// 		} else {
+	
+// 			printf("[%s : %d] table exists => %s",
+// 			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+	
+// 			echo "<br>"; echo "<br>";
+	
+// 		}
+	
+// 		/*******************************
+// 		 return
+// 		*******************************/
+// 		return ;
+	
+	}//do_Job_D_3_V_1_2_2_Process_CreateTable_Genres
+	
 	
 	/*******************************
 	 * <br>
@@ -309,7 +385,12 @@
 		/*******************************
 		 tokens: of a category
 		*******************************/
-		do_Job_D_3_V_1_2_4_Process($smarty);
+// 		do_Job_D_3_V_1_2_4_Process($smarty);
+
+		/*******************************
+			process: table: genres
+		*******************************/
+// 		createTable_Genres($smarty);
 		
 		/*******************************
 		 tpl name

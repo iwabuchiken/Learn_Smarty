@@ -25,6 +25,8 @@
 		
 		public static $tname_Categories = "categories";
 		
+		public static $tname_Genres = "genres";
+		
 		
 		//********************************************
 // 		Functions
@@ -1049,6 +1051,12 @@
 
 				return $res;
 				
+			} else if ($tname == DB::$tname_Genres) {
+			
+				$res = DB::create_Table__Genres($db, $tname);
+
+				return $res;
+				
 			} else {
 			
 				
@@ -1153,6 +1161,39 @@
 			return $res;
 			
 		}//create_Table__Categories		
+		
+		public static function
+		create_Table__Genres($db, $tname) {
+			
+			$sql = "CREATE TABLE IF NOT EXISTS "
+					.DB::$tname_Genres
+					." "
+					."("
+						."id INTEGER PRIMARY KEY, "
+						."created_at VARCHAR(30), "
+						."updated_at VARCHAR(30), "
+								
+						."code VARCHAR(100)"
+						.", "
+						."name VARCHAR(100)"
+					.")"
+			;
+
+			$res = $db->exec($sql);
+			
+			printf("[%s : %d] exec result => %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
+			
+			echo "<br>"; echo "<br>";
+			
+			
+			// 				$db->exec("CREATE TABLE IF NOT EXISTS"
+			// 						." Dogs "
+			// 						."(Id INTEGER PRIMARY KEY, Breed TEXT, Name TEXT, Age INTEGER)");
+
+			return $res;
+			
+		}//create_Table__Genres		
 		
 		public static function
 		drop_Table($db, $tname) {

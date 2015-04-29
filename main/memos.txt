@@ -10,6 +10,7 @@ sqlite3 C:\WORKS\WS\Eclipse_Luna\Smarty\D-2\development.sqlite3
 .tables
 pragma table_info(categories);
 pragma table_info(tokens);
+pragma table_info(genres);
 
 pragma table_info(Dogs);
 

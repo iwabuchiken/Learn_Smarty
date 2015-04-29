@@ -2291,6 +2291,81 @@
 // 			return null;
 			
 		}//get_Histogram
+
+		/*******************************
+			@return
+			-1	=> can't create table<br>
+			1	=> table created<br>
+			2	=> table exists<br>
+		*******************************/
+		public static function
+		createTable($smarty, $tname) {
+		
+			/*******************************
+			 get: db
+			*******************************/
+			$dbType = DB::get_DB_Type();
+		
+			$db = DB::get_DB($dbType);
+		
+			/*******************************
+			 validate: table exists
+			*******************************/
+// 			$tname = DB::$tname_Categories;
+				
+			$res = DB::table_Exists($db, $tname);
+		
+			/*******************************
+			 create: table
+			*******************************/
+			if ($res === false) {
+		
+				$res = DB::create_Table($db, $tname);
+		
+				if ($res != 0) {
+						
+					printf("[%s : %d] can't create table: %s",
+					Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+						
+					echo "<br>"; echo "<br>";
+		
+					$db = null;
+					
+					return -1;
+						
+				} else {
+						
+					printf("[%s : %d] table created: %s",
+					Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+		
+					echo "<br>"; echo "<br>";
+		
+					$db = null;
+					
+					return 1;
+					
+				}
+		
+			} else {
+		
+				printf("[%s : %d] table exists => %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+		
+				echo "<br>"; echo "<br>";
+				
+				$db = null;
+				
+				return 2;
+		
+			}
+		
+			/*******************************
+			 return
+			*******************************/
+// 			return ;
+		
+		}//createTable($smarty, $tname)
+		
 		
 	}//class Utils
 	
