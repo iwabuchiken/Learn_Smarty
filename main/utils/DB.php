@@ -610,6 +610,62 @@
 				
 		}//save_Categories
 
+		/*******************************
+			@return
+			 > 0 => number of data inserted
+			-1 => can't create table
+			-2	=> get_DB --> null returned
+		*******************************/
+		public static function
+		save_Genres($smarty, $categories) {
+			
+			/*******************************
+			 get: db
+			*******************************/
+			$dbType = DB::get_DB_Type();
+				
+			$db = DB::get_DB($dbType);
+			
+			/*******************************
+			 validate
+			*******************************/
+			if ($db == null) {
+			
+				printf("[%s : %d] db => null: type=%s", __FILE__, __LINE__, $dbType);
+			
+				echo "<br>";
+				echo "<br>";
+			
+				return -2;
+			
+			}
+
+			/*******************************
+			 save: tokens
+			*******************************/
+			if ($dbType == DB::$dbType_MySQL) {
+					
+// 				$res = DB::save_Tokens_MYSQL($smarty, $db, $categories);
+					
+			} else if ($dbType == DB::$dbType_SQLite) {
+					
+				$res = DB::save_Genres_SQLITE($smarty, $db, $categories);
+
+			}//if ($dbType == DB::$dbType_MySQL)
+					
+			/*******************************
+			 db: close
+			*******************************/
+			$db = null;
+
+			/*******************************
+				return
+			*******************************/
+			return $res;
+// 			return -1;
+				
+		}//save_Genres
+
 		public static function
 		save_Tokens_MYSQL($smarty, $db, $tokens) {
 
@@ -988,6 +1044,182 @@
 			
 		}//save_Tokens_SQLITE($smarty, $db, $categories)
 
+		/*******************************
+			@return
+			> 0	=> number of data inserted<br>
+			-1	=> can't create table<br>
+			-2	=> can't prepare statement<br>
+		*******************************/
+		public static function
+		save_Genres_SQLITE($smarty, $db, $genres) {
+
+			/*******************************
+				validate: table exists
+			*******************************/
+			$tname = DB::$tname_Genres;
+// 			$tname = DB::$tname_Tokens;
+			
+			$res = DB::table_Exists($db, $tname);
+
+			/*******************************
+				create: table
+			*******************************/
+			if ($res === false) {
+
+				$res = DB::create_Table($db, $tname);
+
+				if ($res != 0) {
+					
+					printf("[%s : %d] can't create table: %s", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+					
+					return -1;
+					
+				} else {
+					
+					printf("[%s : %d] table created: %s", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+					
+				}
+				
+			} else {
+				
+				printf("[%s : %d] table exists => %s", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+				
+				echo "<br>"; echo "<br>";
+				
+			}
+
+			/*******************************
+				insert: data
+			*******************************/
+			$len = count($genres);
+
+			printf("[%s : %d] genres => %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, 
+							count($genres));
+			
+			echo "<br>"; echo "<br>";
+			
+			$count = 0;
+
+// 			printf("[%s : %d] insert into table => %s", 
+// 							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $tname);
+			
+			
+// 			echo "<br>"; echo "<br>";
+			
+			
+			
+			for ($i = 0; $i < $len; $i++) {
+				
+				
+					
+				$c = $genres[$i];
+	
+				//REF http://www.phpeveryday.com/articles/PDO-Insert-and-Update-Statement-Use-Prepared-Statement-P552.html
+				$sql = "INSERT INTO"
+						." "
+						.$tname
+						." "
+						."("
+						." "
+							."id, created_at, updated_at"
+							.", "
+							."code"
+							.", "
+							."name"
+							.", "
+							."original_id"
+						." "
+						.")"
+						." "
+						."VALUES"
+						." "
+						."("
+							.":id, :created_at, :updated_at"
+							.", "
+							.":code"
+							.", "
+							.":name"
+							.", "
+							.":original_id"
+						.")"
+					;
+	
+// 				printf("[%s : %d] sql => %s", 
+// 								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $sql);
+				
+				
+// 				echo "<br>"; echo "<br>";
+				
+				//REF http://php.net/manual/en/pdo.prepare.php
+				//REF prepare http://www.plus2net.com/php_tutorial/pdo-drop.php
+				$q = $db->prepare($sql);
+	
+				if ($q === false) {
+					
+					printf("[%s : %d] prepare => failed: %dth token", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $i);
+					
+					echo "<br>"; echo "<br>";
+					
+// 					return -2;
+					continue;
+					
+				}
+				
+				
+				
+				$res = $q->execute(array(
+	// 							':id'			=> $t->get_db_Id(),
+								':created_at'	=> $c->get_created_at(),
+								':updated_at'	=> $c->get_updated_at(),
+						
+								':code'			=> $c->get_code(),
+								':name'			=> $c->get_name(),
+						
+								':original_id'		=> $c->get_original_id(),
+								)
+				);
+				
+				/*******************************
+					count
+				*******************************/
+				if ($res === true) {
+					
+					$count ++;
+					
+					/*******************************
+						interim
+					*******************************/
+					if ($count % 10 == 0) {
+// 					if ($count % 1000 == 0) {
+						
+						printf("[%s : %d] done => %d (time=%s)", 
+										Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+										__LINE__, 
+										$count,
+										date('m/d/Y H:i:s', time())
+						);
+						
+						echo "<br>"; echo "<br>";
+						
+					}
+					
+				}
+					
+			}//for ($i = 0; $i < $len; $i++)
+			
+			printf("[%s : %d] inserted => %d out of %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, 
+							$count, count($genres));
+			
+			return $count;
+			
+		}//save_Genres_SQLITE($smarty, $db, $genres)
+
 		public static function
 		table_Exists($db, $tname) {
 			
@@ -1176,6 +1408,8 @@
 						."code VARCHAR(100)"
 						.", "
 						."name VARCHAR(100)"
+						.", "
+						."original_id INT(11)"
 					.")"
 			;
 

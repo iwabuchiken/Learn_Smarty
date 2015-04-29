@@ -391,6 +391,11 @@
 			process: table: genres
 		*******************************/
 // 		createTable_Genres($smarty);
+
+		/*******************************
+		 process: save: genres
+		*******************************/
+		$res = Utils::save_Genres_from_CSV($smarty);
 		
 		/*******************************
 		 tpl name

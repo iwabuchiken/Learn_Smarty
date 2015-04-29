@@ -3,6 +3,7 @@
 	require_once 'CONS.php';
 	require_once 'models/Histo.php';
 	require_once 'models/Category.php';
+	require_once 'models/Genre.php';
 	
 	class Utils {
 		
@@ -1472,6 +1473,33 @@
 		}//conv_Row_2_Category
 
 		/*******************************
+			convert: a row of csv data to a token<br>
+			@param
+			$row => ([0] => id, [1] => created_at, ...)
+		*******************************/
+		public static function
+		conv_Row_2_Genre($smarty, $row) {
+
+			$genre = new Genre();
+
+			$genre
+					->set_original_id($row[0])
+					->set_created_at($row[1])
+					->set_updated_at($row[2])
+					
+					->set_code($row[3])
+					->set_name($row[4])
+					
+			;
+				
+			/*******************************
+				return
+			*******************************/
+			return $genre;
+			
+		}//conv_Row_2_Genre($smarty, $row)
+
+		/*******************************
 			convert: a row of db record to a category instance<br>
 			@param
 			$row => ([0] => id, [1] => created_at, ...)
@@ -1754,6 +1782,73 @@
 			
 		}//get_Categories_from_CSV
 
+		/*******************************
+			@return
+			null	=> can't open the file
+		*******************************/
+		public static function
+		get_Genres_from_CSV($smarty, $fname) {
+		
+			/*******************************
+			 open
+			*******************************/
+			$f = fopen($fname, "r");
+		
+			if ($f == false) {
+					
+				printf("[%s : %d] csv => false",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+					
+				echo "<br>";
+				echo "<br>";
+					
+				return null;
+					
+			} else {
+					
+				printf("[%s : %d] csv => opened: %s",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+		
+				echo "<br>"; echo "<br>";
+					
+			}
+		
+			/*******************************
+			 read: csv
+			*******************************/
+			$count = 0;
+			$len = -1;
+		
+			$data = fgetcsv($f, 500, ",");		// first line => header
+			$data = fgetcsv($f, 500, ",");		//
+		
+			$content = "";
+		
+			$genres = array();
+		
+			//REF fgets http://www.tizag.com/phpT/fileread.php
+			while ($data) {
+		
+				$t = Utils::conv_Row_2_Genre($smarty, $data);
+
+				array_push($genres, $t);
+					
+				$data = fgetcsv($f, 500, ",");
+				
+			}//while (condition)
+		
+			/*******************************
+			close
+			*******************************/
+			fclose($f);
+
+			/*******************************
+				return
+			*******************************/
+			return $genres;
+			
+		}//get_Genres_from_CSV
+
 		public static function
 		insertData_Tokens($smarty, $tokens) {
 			
@@ -1989,6 +2084,107 @@
 			}//if ($res > 0)
 			
 		}//save_Categories_from_CSV
+
+		public static function
+		save_Genres_from_CSV($smarty) {
+
+			$dir_csv = "..".DIRECTORY_SEPARATOR."data";
+			
+			$dirlist = scandir($dir_csv);
+			
+			$csv_files = array();
+
+			$p = "/^genres\_/";
+// 			$p = "/^tokens\_/";
+			
+			foreach ($dirlist as $name) {
+				
+				if (preg_match($p, $name) == 1) {
+					
+					array_push($csv_files, $name);
+					
+				};
+				
+			}
+			
+			var_dump($csv_files);
+			
+			echo "<br>"; echo "<br>";
+			
+			/*******************************
+				save: categories
+			*******************************/
+			/*******************************
+				get: categories list
+			*******************************/
+			$fname = implode(DIRECTORY_SEPARATOR, array($dir_csv, $csv_files[0]));
+			
+			printf("[%s : %d] opening a csv... %s", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+			
+			echo "<br>"; echo "<br>";
+			
+			$genres = Utils::get_Genres_from_CSV($smarty, $fname);
+			
+			if ($genres != null) {
+			
+				printf("[%s : %d] genres => %d (file=%s)", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+								__LINE__, count($genres), $fname);
+			
+			} else {
+			
+				printf("[%s : %d] genres => null", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+			}//if ($genres != null)
+			
+			echo "<br>"; echo "<br>";
+
+			/*******************************
+				save: genres
+			*******************************/
+			$res = DB::save_Genres($smarty, $genres);
+		
+			printf("[%s : %d] save genres => %d", 
+							Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $res);
+			
+			echo "<br>"; echo "<br>";
+
+// 			//test: rename
+// 			$res = 1;
+			
+			/*******************************
+				rename: file
+			*******************************/
+			if ($res > 0) {
+
+				$new_name = implode(DIRECTORY_SEPARATOR, array($dir_csv, "_".$csv_files[0]));
+				
+				$res = rename(
+							$fname, 
+							$new_name);
+				
+				if ($res == true) {
+				
+					printf("[%s : %d] csv renamed => %s", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+									__LINE__, 
+									$new_name);
+// 									implode(DIRECTORY_SEPARATOR, array($dir_csv, "*".$csv_files[0])));
+				
+				} else {
+				
+					printf	("[%s : %d] rename csv => failed: %s", 
+									Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, $fname);
+					
+				}//if ($res == true)
+				
+				echo "<br>"; echo "<br>";
+				
+			}//if ($res > 0)
+			
+		}//save_Genres_from_CSV
 
 		public static function
 		get_ServerName() {
