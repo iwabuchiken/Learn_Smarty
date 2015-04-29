@@ -416,6 +416,7 @@
 			*******************************/
 			$rows = array();
 			
+			//REF LIMIT http://www.mysqltutorial.org/mysql-limit.aspx "When you use LIMIT with one argument"
 			$sql = "SELECT * FROM $tname WHERE original_id = $cat_id LIMIT 1;";
 // 			$sql = "SELECT * FROM $tname WHERE category_id = $cat_id LIMIT 1;";
 

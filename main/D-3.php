@@ -262,37 +262,8 @@
 	function 
 	do_Job_D_3_V_1_2_4_Get_2_Categories() {
 
-// 		/*******************************
-// 			dispatch
-// 		*******************************/
-// 		@$server_Name = $_SERVER['SERVER_NAME'];
-
-// 		if ($server_Name == null) {
-
-// 			printf("[%s : %d] servr name => null",
-// 			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
-
-// 			echo "<br>"; echo "<br>";
-
-// 			do_Job_D_3_V_1_2_4_Process($smarty);
-
-// 			return ;
-
-// 		} else if ($server_Name != CONS::$server_Local) {
-
-// 			printf("[%s : %d] server is => $server_Name",
-// 			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
-
-// 			echo "<br>"; echo "<br>";
-			
-// 			do_Job_D_3_V_1_2_4_Process($smarty);
-			
-// 			return ;
-
-// 		}
-
 		/*******************************
-			setup: smarty
+		 setup: smarty
 		*******************************/
 		$smarty = new SmartyBC();
 		
@@ -300,11 +271,40 @@
 		
 		//debug
 		printf("[%s : %d] %s",
-				Utils::get_Dirname(__FILE__, CONS::$proj_Name),
-				// 				Utils::get_Dirname(__FILE__, "Smarty"),
-				__LINE__, Utils::get_CurrentTime());
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+		// 				Utils::get_Dirname(__FILE__, "Smarty"),
+		__LINE__, Utils::get_CurrentTime());
 		
 		echo "<br>"; echo "<br>";
+		
+		/*******************************
+			dispatch
+		*******************************/
+		@$server_Name = $_SERVER['SERVER_NAME'];
+
+		if ($server_Name == null) {
+
+			printf("[%s : %d] servr name => null",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+
+			echo "<br>"; echo "<br>";
+
+			do_Job_D_3_V_1_2_4_Process($smarty);
+
+			return ;
+
+		} else if ($server_Name != CONS::$server_Local) {
+
+			printf("[%s : %d] server is => $server_Name",
+			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+
+			echo "<br>"; echo "<br>";
+			
+			do_Job_D_3_V_1_2_4_Process($smarty);
+			
+			return ;
+
+		}
 
 		/*******************************
 		 tokens: of a category
