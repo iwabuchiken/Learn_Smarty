@@ -263,71 +263,92 @@
 			
 		}//if ($category != null)
 
-// 		printf("[%s : %d] find category => ", 
-// 						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+		/*******************************
+			get: genre
+		*******************************/
+		printf("[%s : %d] finding genre ....", 
+						Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 		
-// 		echo "<br>"; echo "<br>";
-		
-		
-		
-// 		var_dump($category);
-		
-// 		echo "<br>"; echo "<br>";
-		
-		
-		
-		printf("[%s : %d] cat_id => %d(%s/genre_id=%d)",
-		Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
-						__LINE__, $cat_id, $cat_name, $category->get_genre_id());
 		
 		echo "<br>"; echo "<br>";
 		
-// 		/*******************************
-// 		 get: tokens
-// 		*******************************/
-// 		$tokens = DB::findAll_Tokens_from_CatID($smarty, $cat_id);
+		$genre = DB::find_Genre_from_ID($smarty, $genre_id);
+// 		$genre = DB::find_Genre_from_ID($genre_id);
 		
-// 		printf("[%s : %d] tokens => %d",
-// 		Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
 		
-// 		echo "<br>"; echo "<br>";
+		printf("[%s : %d] cat_id => %d(%s/genre_id=%d, %s)",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), 
+				__LINE__, 
+				$cat_id, $cat_name, $genre->get_db_Id(), $genre->get_name());
+// 				$cat_id, $cat_name, $genre->get_db_Id());
+// 				$cat_id, $cat_name, $genre_id);
+// 				$cat_id, $cat_name, $category->get_genre_id());
 		
-// 		$histo = Utils::get_Histogram($tokens);
+		echo "<br>"; echo "<br>";
 		
-// 		/*******************************
-// 		 assing
-// 		*******************************/
-// 		$smarty->assign("histo", array_slice($histo, 0, 20));
+		/*******************************
+		 get: tokens
+		*******************************/
+		$tokens = DB::findAll_Tokens_from_CatID($smarty, $cat_id);
 		
-// 		/*******************************
-// 		 assign: header
-// 		*******************************/
-// 		//REF array_unshift http://stackoverflow.com/questions/8340451/array-push-as-the-first-index-php answered Dec 1 '11 at 11:19
+		// tokens 2
+		$cat_id_2 = 8;
 		
-// 		$header = array(
+		$tokens_2 = DB::findAll_Tokens_from_CatID($smarty, $cat_id_2);
+		
+		printf("[%s : %d] tokens => %d",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens));
+		
+		echo "<br>"; echo "<br>";
+
+		printf("[%s : %d] tokens_2 => %d",
+		Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__, count($tokens_2));
+		
+		echo "<br>"; echo "<br>";
+
+		/*******************************
+			build: histo
+		*******************************/
+		$histo = Utils::get_Histogram($tokens);
+		
+		$histo_2 = Utils::get_Histogram($tokens_2);
+		
+		/*******************************
+		 assing
+		*******************************/
+		$smarty->assign("histo", array_slice($histo, 0, 20));
+		
+		$smarty->assign("histo_2", array_slice($histo_2, 0, 20));
+		
+		/*******************************
+		 assign: header
+		*******************************/
+		//REF array_unshift http://stackoverflow.com/questions/8340451/array-push-as-the-first-index-php answered Dec 1 '11 at 11:19
+		
+		$header = array(
 					
-// 						"SN",
-// 						"db ids",
-// 				"form",
-// 				"hin",
-// 				"hin_1",
-// 				"hin_2",
-// 				"hin_3",
-// 				"histo",
-// 		);
+						"SN",
+						"db ids",
+				"form",
+				"hin",
+				"hin_1",
+				"hin_2",
+				"hin_3",
+				"histo",
+		);
 		
-// 		$smarty->assign("header", $header);
+		$smarty->assign("header", $header);
 		
-// 		/*******************************
-// 		 end
-// 		*******************************/
-// 		$end = time();
+		/*******************************
+		 end
+		*******************************/
+		$end = time();
 		
-// 		printf("[%s : %d] <span class=\"green\">time => %s</span>",
-// 		Utils::get_Dirname(__FILE__, CONS::$proj_Name),
-// 		__LINE__, date('H:i:s', $end - $start - (9*60*60)));
+		printf("[%s : %d] <span class=\"green\">time => %s</span>",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name),
+				__LINE__, date('H:i:s', $end - $start - (9*60*60)));
 		
-// 		echo "<br>"; echo "<br>";
+		echo "<br>"; echo "<br>";
 		
 		
 	}//do_Job_D_3_V_1_2_4_Process
@@ -353,39 +374,39 @@
 		
 		echo "<br>"; echo "<br>";
 		
-		/*******************************
-			dispatch
-		*******************************/
-		@$server_Name = $_SERVER['SERVER_NAME'];
+// 		/*******************************
+// 			dispatch
+// 		*******************************/
+// 		@$server_Name = $_SERVER['SERVER_NAME'];
 
-		if ($server_Name == null) {
+// 		if ($server_Name == null) {
 
-			printf("[%s : %d] servr name => null",
-			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+// 			printf("[%s : %d] servr name => null",
+// 			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 
-			do_Job_D_3_V_1_2_4_Process($smarty);
+// 			do_Job_D_3_V_1_2_4_Process($smarty);
 
-			return ;
+// 			return ;
 
-		} else if ($server_Name != CONS::$server_Local) {
+// 		} else if ($server_Name != CONS::$server_Local) {
 
-			printf("[%s : %d] server is => $server_Name",
-			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+// 			printf("[%s : %d] server is => $server_Name",
+// 			Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
 
-			echo "<br>"; echo "<br>";
+// 			echo "<br>"; echo "<br>";
 			
-			do_Job_D_3_V_1_2_4_Process($smarty);
+// 			do_Job_D_3_V_1_2_4_Process($smarty);
 			
-			return ;
+// 			return ;
 
-		}
+// 		}
 
 		/*******************************
 		 tokens: of a category
 		*******************************/
-// 		do_Job_D_3_V_1_2_4_Process($smarty);
+		do_Job_D_3_V_1_2_4_Process($smarty);
 
 		/*******************************
 			process: table: genres
@@ -405,9 +426,9 @@
 		/*******************************
 		view
 		*******************************/
-// 		$tpl_name = "D-3/index/D_3_V_1_2_4.tpl";	// 
+		$tpl_name = "D-3/index/D_3_V_1_2_4.tpl";	// 
 // 		$tpl_name = "D-3/index/index_table.tpl";	// w
-		$tpl_name = "plain.tpl";	// 
+// 		$tpl_name = "plain.tpl";	// 
 // 		$tpl_name = "plain.tpl";	// 
 
 		$smarty->assign("message", "ok");

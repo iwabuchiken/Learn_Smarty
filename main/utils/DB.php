@@ -500,6 +500,116 @@
 
 		/*******************************
 			@return
+			Array of fetched rows<br>
+			null	=> can't get db<br>
+					=> query returned 0<br>
+					=> row-to-category conversion returned null<br>
+		*******************************/
+		public static function
+// 		find_Genre_from_ID($genre_id) {
+		find_Genre_from_ID($smarty, $genre_id) {
+			
+			/*******************************
+				get: db
+			*******************************/
+			$dbType = DB::get_DB_Type();
+			
+			$db = DB::get_DB($dbType);
+
+			/*******************************
+				validate
+			*******************************/
+			if ($db == null) {
+				
+				printf("[%s : %d] db => null: type=%s", __FILE__, __LINE__, $dbType);
+				
+				echo "<br>";
+				echo "<br>";
+				
+				return null;
+				
+			}
+
+			/*******************************
+				setup
+			*******************************/
+			$tname = DB::$tname_Genres;
+// 			$tname = DB::$tname_Categories;
+			
+			/*******************************
+				get: tokens
+			*******************************/
+			$rows = array();
+			
+			@$server_Name = $_SERVER['SERVER_NAME'];
+			
+			if ($server_Name == null) {
+	
+				printf("[%s : %d] Can't get server name",
+				Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+				echo "<br>"; echo "<br>";
+				
+				$db = null;
+				
+				return null;
+				
+			} else if ($server_Name != CONS::$server_Local) {
+	
+				//REF LIMIT http://www.mysqltutorial.org/mysql-limit.aspx "When you use LIMIT with one argument"
+				$sql = "SELECT * FROM $tname WHERE id = $genre_id LIMIT 1;";
+	
+			} else {
+				
+				//REF LIMIT http://www.mysqltutorial.org/mysql-limit.aspx "When you use LIMIT with one argument"
+				$sql = "SELECT * FROM $tname WHERE original_id = $genre_id LIMIT 1;";
+				
+			}
+			
+// 			//REF LIMIT http://www.mysqltutorial.org/mysql-limit.aspx "When you use LIMIT with one argument"
+// 			$sql = "SELECT * FROM $tname WHERE original_id = $genre_id LIMIT 1;";
+
+			$res = $db->query($sql);
+
+			/*******************************
+				validate
+			*******************************/
+			if (get_class($res) != "PDOStatement" && $res == 0) {
+				
+				printf("[%s : %d] SQL returned 0 for genre id: $genre_id", 
+								Utils::get_Dirname(__FILE__, CONS::$proj_Name), __LINE__);
+				
+				$db = null;
+				
+				return null;
+				
+			}
+			
+			/*******************************
+				fetch
+			*******************************/
+			while($row = $res->fetch()){
+
+				array_push($rows, $row);
+
+			}
+
+			/*******************************
+				db: close
+			*******************************/
+			$db = null;
+
+			/*******************************
+				conversion
+			*******************************/
+// 			return Utils::conv_DB_2_Category($rows[0]);
+			return Utils::conv_DB_2_Genre($smarty, $rows[0]);
+// 			return Utils::conv_DB_2_Category($smarty, $rows[0]);
+			
+		}//find_Genre_from_ID($smarty, $genre_id)
+
+		/*******************************
+			@return
 			 > 0 => number of data inserted
 			-1 => can't create table
 			-2	=> get_DB --> null returned

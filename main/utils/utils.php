@@ -1505,6 +1505,7 @@
 			$row => ([0] => id, [1] => created_at, ...)
 		*******************************/
 		public static function
+// 		conv_DB_2_Category($row) {
 		conv_DB_2_Category($smarty, $row) {
 
 			$category = new Category();
@@ -1525,6 +1526,34 @@
 			return $category;
 			
 		}//conv_Row_2_Category
+
+		/*******************************
+			convert: a row of db record to a genre instance<br>
+			@param
+			$row => ([0] => id, [1] => created_at, ...)
+		*******************************/
+		public static function
+		conv_DB_2_Genre($smarty, $row) {
+
+			$genre = new Genre();
+
+			$genre
+					->set_db_Id($row[0])
+					->set_created_at($row[1])
+					->set_updated_at($row[2])
+					
+					->set_code($row[3])
+					->set_name($row[4])
+					
+					->set_original_id($row[5])
+			;
+				
+			/*******************************
+				return
+			*******************************/
+			return $genre;
+			
+		}//conv_Row_2_Genre
 
 		public static function
 		divide_CSV($smarty) {
