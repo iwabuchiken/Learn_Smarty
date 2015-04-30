@@ -17,8 +17,10 @@ pragma table_info(Dogs);
 SELECT * FROM Dogs;
 
 SELECT * FROM tokens;
+SELECT * FROM genres;
 
 DROP TABLE tokens;
+DROP TABLE genres;
 
 REF http://stackoverflow.com/questions/12436596/how-to-count-number-of-records-in-sqlite answered Sep 15 '12 at 15:07
 SELECT COUNT(*) FROM tokens;
