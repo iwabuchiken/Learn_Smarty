@@ -202,6 +202,8 @@ class CONS {
 			
 	);
 
+	public static $histo_file_size = 100;
+	
 	/*******************************
 		history
 	*******************************/

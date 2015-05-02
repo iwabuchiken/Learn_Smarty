@@ -1,6 +1,6 @@
 <?php
 
-	class Histo {
+	class Histo implements Serializable {
 		
 		private $histo;
 		
@@ -15,6 +15,24 @@
 		private $yomi;
 		
 		private $db_id;
+
+		/*******************************
+			serialize
+		*******************************/
+		public function serialize() {
+// 			echo "Serializing MyClass...\n";
+// 			return serialize($this->data);
+			return serialize();
+		}
+		
+		public function unserialize($data) {
+// 			echo "Unserializing MyClass...\n";
+// 			$this->data = unserialize($data);
+
+			unserialize($data);
+			
+		}
+		
 		
 		function get_db_id() {
 
